@@ -27,13 +27,11 @@ def dominante_moods():
 
 @app.route('/valence', methods=['POST'])
 def valence():
-    dominante = []
     data = request.get_json()  # This will get the JSON data sent with the POST
     if not data:
         return jsonify({'error': 'No data received'}), 400
 
     #print("Received data:", data)  # Log the received data
-
 
     # Example: return received data or some processed result
     return jsonify({'message': 'Data processed', 'yourData': data}), 200
