@@ -1,20 +1,20 @@
 from flask import Flask, request, jsonify
-
+from flask_cors import CORS
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/emotions', methods=['POST'])
 def calculate_percentages():
-    data = request.get_json()
+    data = request.get_json()  # This will get the JSON data sent with the POST
     if not data:
-        return jsonify({'error': 'Invalid input'}), 400
+        return jsonify({'error': 'No data received'}), 400
 
-    total_appearances = sum(data.values())
-    if total_appearances == 0:
-        return jsonify({emotion: 0 for emotion in data}), 200
+    print("Received data:", data)  # Log the received data
+    print(type(data), type(data['affects'][0]))
 
-    percentages = {emotion: (count / total_appearances) * 100 for emotion, count in data.items()}
-    return jsonify(percentages), 200
+    # Example: return received data or some processed result
+    return jsonify({'message': 'Data processed', 'yourData': data}), 300
+
 
 
 if __name__ == '__main__':
