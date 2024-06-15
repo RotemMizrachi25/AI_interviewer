@@ -1,12 +1,25 @@
 import { useEffect, useRef, useState } from "react";
-import "./componentCSS/moodComponent.css"
+import "./componentCSS/moodComponent.css";
 
-const MoodComponent = () => {
+
+const MoodComponent  = props => {
   const grid = useRef(undefined);
   const pin_wrap = useRef(undefined);
   const pin = useRef(undefined);
-  const [gridN, setGridN] = useState(38)
+  const [gridN, setGridN] = useState(38);
   const crtDisableTimeout = useRef(undefined);
+  const [data, setData] = useState([]);
+  const [output, setOutput] = useState(null);
+
+  // Use onDataReceive as a function within this component
+  // function someFunction(onDataReceive) {
+  //   const data = "Example data";
+  //   onDataReceive(data);  // Calling the function passed as a prop
+  // }
+
+  useEffect(() => {
+    console.log("MoodData at comp: ", data);
+  }, [data]);
 
   useEffect(() => {
     grid.current = document.querySelector("#grid");
@@ -30,16 +43,33 @@ const MoodComponent = () => {
       window.addEventListener("CY_FACE_AROUSAL_VALENCE_RESULT", fn);
       window.addEventListener("resize", fn2);
     }
-  
-    function fn (evt) {
+
+
+    function fn (evt, onDataReceive) {
       showPin();
+      setOutput(evt.detail.output);
       setEmotion(evt.detail.output);
+      console.log("mood: ", evt.detail.output, " type: ", typeof evt.detail.output);
+      //setData(data => [...data, evt.detail.output]);
+      if (typeof props.onDataRecieve === 'function') {
+        if(data.length <= 120){
+          props.onDataRecieve(evt.detail.output['affect98']);
+        }
+      } else {
+        console.error('onDataReceive is not a function!', onDataReceive);
+      }
+      // onDataReceive(data);
+
+      // console.log("onDataReceive: ", onDataReceive);
       resetTimeout();
     };
+
+
 
     function fn2 () {
       setDim();
     };
+
   
     function setDim (){
       if (!grid.current || grid.current.clientWidth === 0) {
