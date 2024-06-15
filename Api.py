@@ -47,7 +47,7 @@ def arousel():
     if not data:
         return jsonify({'error': 'No data received'}), 400
 
-    count = sum(1 for value in data if value > 0.5)
+    count = sum(1 for value in data['arousel'] if value > 0.5)
     total = len(data)
     percentage = (count / total) * 100
     print("you had your arousel on the interview " + percentage + "precent of the time")
@@ -62,7 +62,7 @@ def attention():
 
     print("Received data:", data)  # Log the received data
 
-    count = sum(1 for value in data if value > 0.5)
+    count = sum(1 for value in data['attention'] if value > 0.5)
     total = len(data)
     percentage = (count / total) * 100
     print("you had your attention to the interview " + percentage + "precent of the time")
