@@ -18,39 +18,77 @@ function App() {
   const mphToolsState = useExternalScript("https://sdk.morphcast.com/mphtools/v1.0/mphtools.js");
   const aiSdkState = useExternalScript("https://ai-sdk.morphcast.com/v1.16/ai-sdk.js");
   const videoEl = useRef(undefined)
-  const [moodData, setMoodData] = useState([]);
+  // Mood Data
+  const [affects, setAffects] = useState([]);
+  //Engagement
+  const [valence, setValence] = useState([]);
+  const [attention, setAttention] = useState([]);
+  const [arousal, setArousal] = useState([]);
 
-  const apiCaller = async () => {
-    const response = await fetch(`http://localhost:5000/emotions${moodData}`,{
+  const moodApiCaller = async () => {
+    const response = await fetch(`http://localhost:5000/affects`,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({})
+      body: JSON.stringify({affects: affects})
     });
     //console.log(response);
     const response_json = await response.json();
 
     console.log(response_json.results);
-    //setShowTable(true);
   };
 
-  // Function to handle data received from the child
-  const handleMoodData = (newData) => {
-    //console.log('Data received from child:', newData);
-    setMoodData(moodData => [...moodData, newData]);
+  const engageApiCaller = async (fieldName, field) => {
+    const response = await fetch(`http://localhost:5000/${fieldName}`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({[fieldName]: field})
+    });
+
+    const response_json = await response.json();
+    console.log(response_json.results);
+
   };
 
-  if(moodData.length === 120){
-    console.log(moodData.length);
-    console.log("Type MoodData:", typeof moodData);
-    apiCaller();
+  const handleMoodData = (newAffects) => {
+    setAffects(affects => [...affects, newAffects]);
+  };
+
+  const handleArousalValencData = (newArousal, newValence) => {
+    setArousal(arousal => [...arousal, newArousal]);
+    setValence(valence => [...valence, newValence]);
+  }
+  const handleAttentionData = (newAttention) => {
+    setAttention(attention => [...attention, newAttention]);
   }
 
+
+
   useEffect(() => {
-    console.log("MoodData from comp: ", moodData);
-    console.log("Type MoodData:", typeof moodData);
-  }, [moodData]);
+    console.log("MoodData from comp: ", affects);
+    if(affects.length === 120){
+      console.log("Type MoodData:", typeof moodData);
+      moodApiCaller();
+    }
+  }, [affects]);
+
+  useEffect(() => {
+    console.log("EngageData from comp: ", arousal, valence, attention);
+    if(arousal.length === 120){
+      engageApiCaller("arousal", arousal);
+    }
+    if(valence.length === 120){
+      engageApiCaller("valence", valence);
+    }
+    if(attention.length === 400){
+      engageApiCaller("attention", attention);
+    }
+  }, [arousal, valence, attention]);
+
+
 
   useEffect(() => {
     videoEl.current = document.getElementById("videoEl");
@@ -85,7 +123,7 @@ function App() {
           <hr className="solid" style={{width:"100%"}}></hr>
           <FeatureComponent></FeatureComponent>
           <hr className="solid" style={{width:"100%"}}></hr>
-          <EngagementComponent></EngagementComponent>
+          <EngagementComponent onDataAttention={handleAttentionData} onDataArousalValence={handleArousalValencData}/>
           <hr className="solid" style={{width:"100%"}}></hr>
           <MoodComponent onDataRecieve={handleMoodData}/>
           <hr className="solid" style={{width:"100%"}}></hr>

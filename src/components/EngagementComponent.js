@@ -2,11 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import "./componentCSS/engagementComponent.css"
 
 
-const EngagementComponent = () => {
+const EngagementComponent = props => {
   const [arousal, setArousal] = useState(0);
   const [valence, setValence] = useState(0);
   const [attention, setAttention] = useState(0);
   const timeout = useRef(undefined);
+  const [counter1, setCounter1] = useState(0);
+  const [counter2, setCounter2] = useState(0);
+
 
   useEffect(() => {
     function resetTimeout() {
@@ -28,11 +31,30 @@ const EngagementComponent = () => {
     }
     
     function handleArousalValenceEvents (evt) {
+        //console.log("engage1:",evt.detail.output.arousal, evt.detail.output.valence);
+        if (typeof props.onDataArousalValence === 'function') {
+            if(counter1 <= 120){
+                props.onDataArousalValence(evt.detail.output.arousal, evt.detail.output.valence,);
+                setCounter1(counter1 + 1);
+            }
+        } else {
+            console.error('onDataArousalValence is not a function!',);
+        }
         setValence(Math.abs(evt.detail.output.valence * 100) || 0);
         setArousal(Math.abs(evt.detail.output.arousal * 100) || 0);
         resetTimeout();
     }
     function handleAttentionEvents (evt) {
+        //console.log("attention:",evt.detail.output.attention);
+        if (typeof props.onDataAttention === 'function') {
+            if(counter2 <= 400){
+                props.onDataAttention(evt.detail.output.attention);
+                setCounter2(counter2 + 1);
+            }
+        } else {
+            console.error('onDataAttention is not a function!',);
+        }
+
         if (evt.detail.output.attention > 0.1) {
             setAttention(evt.detail.output.attention * 100 || 0);
             resetTimeout();
