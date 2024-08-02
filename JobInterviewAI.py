@@ -57,25 +57,27 @@ def content_analyzer(field, question, answer):
                    f"{question}. I answered: {answer}." \
                    f"give me 2 disadvantages and 2 advantages in my answer. give me 2 suggestion of changes I could " \
                    f"say to " \
-                   f"improve my answer. If the disadvantage/advantage/suggestion are minor write none" \
+                   f"improve my answer and 1 revised answer." \
+                   f" If the disadvantage/advantage/suggestion are minor write none" \
                    f"Answer in json:" \
                    f"[disadvantage1]:[the disadvantage/none]" \
                    f"[disadvantage2]:[the disadvantage/none]" \
                    f"[advantage1]:[the advantage/none]" \
                    f"[advantage2]:[the advantage/none]" \
                    f"[suggestion1]:[the suggestion/none]" \
-                   f"[suggestion2]:[the suggestion/none]"
+                   f"[suggestion2]:[the suggestion/none]" \
+                   f"[revised answer]:[the revised answer]"
     return generate_chat_call(user_massage, 0.9)
 
 
 if __name__ == '__main__':
-    # print(question_generator_temp("computer science"))
-    answerb = "I'm not really sure. I guess I can work alone, but I don't really like it. I prefer when someone tells " \
+    #print(question_generator_temp("computer science"))
+    answer = "I'm not really sure. I guess I can work alone, but I don't really like it. I prefer when someone tells " \
               "me exactly what to do, step by step. In my classes, I always relied on group projects because it was " \
               "easier to share the workload and get answers from others. Working alone can be stressful, and I might " \
               "get stuck without anyone to help me immediately. So, I guess I'm not that comfortable working " \
               "independently. "
-    answer = "Yes, I am comfortable working independently. During my time in the army, I often had to tackle complex " \
+    answerb = "Yes, I am comfortable working independently. During my time in the army, I often had to tackle complex " \
              "technical challenges on my own, which required me to take initiative and develop problem-solving " \
              "skills. Additionally, my experience as a computer science student has involved a significant amount of " \
              "" \
