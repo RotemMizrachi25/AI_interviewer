@@ -44,20 +44,6 @@ const Nav = () => {
                         <Tab label="Start" component={Link} to="/simulation" />
                         <Tab label="Page 1" component={Link} to="/page1" />
                     </Tabs>
-                    {/*<Button*/}
-                    {/*    href="/"*/}
-                    {/*    variant={"outlined"}*/}
-                    {/*    sx={{marginLeft:"10px"}}*/}
-                    {/*    color="primary">Home</Button>*/}
-                    {/*<Button*/}
-                    {/*    //variant={"contained"}*/}
-                    {/*    sx={{marginLeft:"10px"}}*/}
-                    {/*    color="primary"*/}
-                    {/*    href="/simulation">Start</Button>*/}
-                    {/*<Button*/}
-                    {/*    variant={"contained"}*/}
-                    {/*    sx={{marginLeft:"10px"}}*/}
-                    {/*    color="primary">hello</Button>*/}
                 </Toolbar>
             </AppBar>
         </div>
