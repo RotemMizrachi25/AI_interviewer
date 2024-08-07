@@ -31,7 +31,7 @@ const Nav = () => {
 
     return(
         <div>
-            <AppBar sx={{background:"#063970"}}>
+            <AppBar sx={{background:"darkblue"}}>
                 <Toolbar>
                     <Typography>AI Interview Assistant</Typography>
                     <Tabs

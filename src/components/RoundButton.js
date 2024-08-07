@@ -14,7 +14,7 @@ const RoundButton = styled(Button)(({ theme }) => ({
     backgroundColor: "darkblue",
     color: "white",
     '&:hover': {
-        backgroundColor: 'lightskyblue', // Change hover color
+        backgroundColor: '#4169E1', // Change hover color
     },
 }));
 
