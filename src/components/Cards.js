@@ -9,7 +9,7 @@ import {Button, CardActionArea, CardActions, Grid} from '@mui/material';
 export default function InterviewerCards({func}) {
     return (
         <>
-            <Typography variant="h3" align="center" gutterBottom color="darkblue" fontWeight={"bold"}>
+            <Typography variant="h3" align="center" gutterBottom color="darkblue" fontWeight={900}>
                 Choose Your Interviewer
             </Typography>
             <Grid container spacing={2} justifyContent="center" alignItems="center" margin="20px">
@@ -19,8 +19,14 @@ export default function InterviewerCards({func}) {
                             <CardMedia
                                 component="img"
                                 height="140"
-                                image="card1.jpg"
-                                alt="green iguana"
+                                image="assets_images/tought_c.png"
+                                alt="tought interviewer"
+                                sx={{
+                                    objectFit: 'cover', // This ensures the image covers the area, focusing on the center
+                                    objectPosition: 'top',
+                                    width: '100%',      // This makes sure the image takes the full width of the container
+                                    height: { xs: 'auto', sm: 140}, // Adjust height based on screen size
+                                }}
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div">
@@ -43,8 +49,14 @@ export default function InterviewerCards({func}) {
                             <CardMedia
                                 component="img"
                                 height="140"
-                                image="card1.jpg"
-                                alt="green iguana"
+                                image="assets_images/psy_c.png"
+                                alt="psychologist interviewer"
+                                sx={{
+                                    objectFit: 'cover', // This ensures the image covers the area, focusing on the center
+                                    objectPosition: 'top',
+                                    width: '100%',      // This makes sure the image takes the full width of the container
+                                    height: { xs: 'auto', sm: 140}, // Adjust height based on screen size
+                                }}
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div">
@@ -67,8 +79,14 @@ export default function InterviewerCards({func}) {
                             <CardMedia
                                 component="img"
                                 height="140"
-                                image="card1.jpg"
-                                alt="green iguana"
+                                image="assets_images/nerd_c.png"
+                                alt="nerd interviewer"
+                                sx={{
+                                    objectFit: 'cover', // This ensures the image covers the area, focusing on the center
+                                    objectPosition: 'top',
+                                    width: '100%',      // This makes sure the image takes the full width of the container
+                                    height: { xs: 'auto', sm: 140}, // Adjust height based on screen size
+                                }}
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div">
@@ -91,8 +109,14 @@ export default function InterviewerCards({func}) {
                             <CardMedia
                                 component="img"
                                 height="140"
-                                image="card1.jpg"
-                                alt="green iguana"
+                                image="assets_images/friendly_c.png"
+                                alt="friendly interviwer"
+                                sx={{
+                                    objectFit: 'cover', // This ensures the image covers the area, focusing on the center
+                                    objectPosition: 'top',
+                                    width: '100%',      // This makes sure the image takes the full width of the container
+                                    height: { xs: 'auto', sm: 140}, // Adjust height based on screen size
+                                }}
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div">

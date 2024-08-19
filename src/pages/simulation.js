@@ -3,7 +3,7 @@ import { useExternalScript } from "../helpers/ai-sdk/externalScriptsLoader";
 import { getAiSdkControls } from "../helpers/ai-sdk/loader";
 import { BsSkipEndFill } from "react-icons/bs";
 import '../App.css';
-
+import '../index.css';
 import GenderComponent from "../components/GenderComponent";
 import AgeComponent from "../components/AgeComponent";
 import DominantEmotionComponent from "../components/DominantEmotionComponent";
@@ -22,6 +22,7 @@ import InterviewerCards from "../components/Cards";
 import {Button} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Question from "../components/Question";
+import SpeakingCharacter from "../components/SpeakingCharacter";
 
 function Simulation() {
 
@@ -38,6 +39,8 @@ function Simulation() {
     const [showVideo, setVideo] = useState(false);
     const [showCards, setCards] = useState(true);
     const [showQuestion, setQuestion] = useState(false);
+    const [interviewerId, setInterviewerId] = useState(null);
+
 
     const moodApiCaller = async () => {
         const response = await fetch(`http://localhost:5000/affects`,{
@@ -119,6 +122,7 @@ function Simulation() {
     // Function to hide the cards after choosing an interviewer
     const hideCards = ({interviewerId}) => {
         setCards(false);
+        setInterviewerId(interviewerId);
         alert(interviewerId);
         //generate the interview questions
         setQuestion(true);
@@ -126,29 +130,31 @@ function Simulation() {
 
     return (
         <div style={{backgroundColor:"#b7cbf5", minHeight: "100vh"}}>
-                <div style={{display:"flex", flexDirection: "column", alignItems:"center"}}>
+            <div >
                     <br/>
                     <br/>
                     <br/>
                     <br/>
                     <br/>
-                    <div>
+
+                    <div style={{display:"flex", flexDirection: "column", alignItems:"center"}}>
                         {showCards && <InterviewerCards func={hideCards}/>}
                     </div>
                     <div>
                         {showQuestion &&
-                            <Question question={"What motivated you to pursue a career in computer science?"}/>
-                        }
-                        <br/>
-                    </div>
-                    <hr className="solid" style={{width:"100%", color:"darkblue", backgroundColor:"darkblue", height:2}}></hr>
+                            <Question question={"What motivated you to pursue a career in computer science?"} showCards={showCards} showVideo={showVideo} handleClickButton={handleClickButton} interviewId={interviewerId}/>
 
-                    {!showCards && (
-                        showVideo ? (
-                            <RoundButton onClick={handleClickButton}> Submit Answer</RoundButton>
-                        ) : (
-                            <RoundButton onClick={handleClickButton}> Ready to Answer</RoundButton>
-                        ))}
+                        }
+                    </div>
+                    <br/>
+                    {/*<hr className="solid" style={{width:"100%", color:"darkblue", backgroundColor:"darkblue", height:2}}></hr>*/}
+
+                    {/*{!showCards && (*/}
+                    {/*    showVideo ? (*/}
+                    {/*        <RoundButton onClick={handleClickButton}> Submit Answer</RoundButton>*/}
+                    {/*    ) : (*/}
+                    {/*        <RoundButton onClick={handleClickButton}> Ready to Answer</RoundButton>*/}
+                    {/*    ))}*/}
 
                     {!showCards && showVideo && <VideoComponent showVideo={showVideo} aiSdkState={aiSdkState} mphToolsState={mphToolsState} onTimerEnd={stopVideo}/>}
                     {/*<GenderComponent></GenderComponent>*/}

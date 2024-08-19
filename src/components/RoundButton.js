@@ -10,6 +10,8 @@ const RoundButton = styled(Button)(({ theme }) => ({
     minHeight: '50px',   // Ensures button remains round
     padding: 0,          // Optional
     boxShadow: theme.shadows[3], // Add shadow for effect
+    margin: 50,
+    position: "relative",
     fontWeight: 'bold',
     backgroundColor: "darkblue",
     color: "white",

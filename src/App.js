@@ -1,5 +1,5 @@
-// Filename - App.js
 
+import theme from './theme';
 import React from "react";
 import Nav from "./nav";
 import {
@@ -10,20 +10,23 @@ import {
 import {Home} from "./pages/home";
 import Simulation from "./pages/simulation"
 import {Page1} from "./pages/page1";
+import {ThemeProvider} from "@mui/material";
 
 
 function App() {
     return (
         <>
-            <Router>
-                <Nav/>
-                <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/simulation" element={<Simulation />} />
-                        <Route path="/page1" element={<Page1 />} />
+            <ThemeProvider theme={theme}>
+                <Router>
+                    <Nav/>
+                    <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/simulation" element={<Simulation />} />
+                            <Route path="/page1" element={<Page1 />} />
 
-                </Routes>
-            </Router>
+                    </Routes>
+                </Router>
+            </ThemeProvider>
         </>
     );
 }

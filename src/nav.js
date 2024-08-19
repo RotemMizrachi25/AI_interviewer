@@ -33,7 +33,7 @@ const Nav = () => {
         <div>
             <AppBar sx={{background:"darkblue"}}>
                 <Toolbar>
-                    <Typography>AI Interview Assistant</Typography>
+                    <Typography variant="h5" fontWeight={900}>AI Interview Assistant</Typography>
                     <Tabs
                         sx={{marginLeft:"auto"}}
                         textColor="inherit"

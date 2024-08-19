@@ -36,3 +36,55 @@
     transform: rotate(360deg);
   }
 }
+
+/* global design */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #b7cbf5; /* Your desired background color */
+  /*overflow-x: hidden; !* Prevent horizontal scrolling *!*/
+}
+
+
+/* speaking character*/
+
+.character-animation {
+  width: 300px;
+  margin-left: auto;
+  /*position: absolute;*/
+  /*right: px; !* Adjust this value to position it closer or farther from the left *!*!*!*/
+  top: 20px; /* Adjust this value to control the vertical position */
+}
+
+.character-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centers items vertically */
+  /*border-width: 10px;*/
+  /*border-color: darkblue;*/
+  /*border-style: solid;*/
+  position: relative;
+  margin-right: 300px;
+  /*margin-left: 160px;*/
+}
+
+@media (max-width: 768px) {
+  .character-container {
+    flex-direction: column; /* Stack items vertically on smaller screens */
+    align-items: center; /* Center them horizontally */
+    margin-right: 10px;
+  }
+
+  .character-animation {
+    margin-left: auto;
+  }
+}
+
+@media (min-width: 769px) {
+  .character-container {
+    flex-direction: row; /* Default horizontal layout on larger screens */
+  }
+}
+
+
