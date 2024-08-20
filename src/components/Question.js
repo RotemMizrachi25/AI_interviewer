@@ -2,7 +2,7 @@ import Typography from "@mui/material/Typography";
 import SpeechBalloon from "./SpeechBaloon";
 import {Button} from "@mui/material";
 import {BsSkipEndFill} from "react-icons/bs";
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import SpeakingCharacter from "./SpeakingCharacter";
 import RoundButton from "./RoundButton";
 import Box from '@mui/material/Box';
@@ -28,6 +28,55 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
         open_mouth_image = "assets_images/friendly_c.png";
         closed_mouth_img = "assets_images/friendly_o.png";
     }
+
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const audioRef = useRef(null);
+    const [isSpeaking, setIsSpeaking] = useState(false);
+    const audioSources = [
+        "/output1.mp3", // for index 0
+        "/output2.mp3", // for index 1
+        "/output3.mp3", // for index
+    ];
+
+    useEffect(() => {
+        const audio = audioRef.current;
+
+        const handlePlay = () => {
+            setIsSpeaking(true); // Start animation when audio starts playing
+        };
+
+        const handleEnded = () => {
+            setIsSpeaking(false); // Stop animation when audio ends
+        };
+
+        if (audio) {
+            audio.addEventListener('play', handlePlay);
+            audio.addEventListener('ended', handleEnded);
+        }
+
+        return () => {
+            if (audio) {
+                audio.removeEventListener('play', handlePlay);
+                audio.removeEventListener('ended', handleEnded);
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        if (audioSources[currentQuestionIndex]) {
+            console.log("hi")
+            audioRef.current.src = audioSources[currentQuestionIndex]; // Set the new audio source
+            audioRef.current.load(); // Load the new audio source
+            audioRef.current.play()
+                .then(() => {
+                    console.log('Audio is playing');
+                })
+                .catch((error) => {
+                    console.log('Error playing audio:', error);
+                });
+        }
+    }, []);
+
     return(
         <Box
              p={2}
@@ -46,13 +95,17 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
             <SpeakingCharacter
                 openMouthImage={open_mouth_image}
                 closedMouthImage={closed_mouth_img}
-                animationSpeed={300}/>
+                animationSpeed={300}
+                isSpeaking={isSpeaking}/>
             {!showCards && (
                 showVideo ? (
                     <RoundButton onClick={handleClickButton}> Submit Answer</RoundButton>
                 ) : (
                     <RoundButton onClick={handleClickButton}> Ready to Answer</RoundButton>
                 ))}
+            <div>
+                <audio ref={audioRef}/>
+            </div>
             <Button
                 style={{
                     position: 'absolute',

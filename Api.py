@@ -59,6 +59,7 @@ def submit_data():
     field = data.get('field')
     print(interviewer_type,field)
     response = generate_questions(field, interviewer_type)
+    #response = {"question1": " what did you do today"}
     print(response)
     return jsonify(response)
 

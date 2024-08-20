@@ -40,7 +40,13 @@ function Simulation() {
     const [showCards, setCards] = useState(true);
     const [showQuestion, setQuestion] = useState(false);
     const [interviewerId, setInterviewerId] = useState(null);
-    const [questions, setQuestions] = useState([]);
+    const [questions, setQuestions] = useState({});
+    const [questionKeys,setQuestionkeys] = useState([]);
+    const audioSources = [
+        "/output1.mp3", // for index 0
+        "/output2.mp3", // for index 1
+        "/output3.mp3", // for index
+    ];
 
 
     const moodApiCaller = async () => {
@@ -68,7 +74,7 @@ function Simulation() {
 
         const response_json = await response.json();
         console.log(response_json);
-        console.log(response_json['question1']);
+        setQuestions(response_json)
     };
 
 
@@ -134,6 +140,14 @@ function Simulation() {
         //call to evaluate answer function
     };
 
+     useEffect(() => {
+        audioSources.forEach((src) => {
+            const audio = new Audio(src);
+            audio.preload = "auto";
+        });
+    }, [audioSources]);
+
+
     // Function to hide the cards after choosing an interviewer
     const hideCards = ({interviewerId}) => {
         setCards(false);
@@ -149,6 +163,44 @@ function Simulation() {
         }
     }, [interviewerId]);
 
+     useEffect(() => {
+        if (questions != null) {
+            const questionKeys = setQuestionkeys(Object.keys(questions)); // Extract keys from the dictionary
+        }
+    }, [questions]);
+
+
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+    const handleNextQuestion = () => {
+        if (currentQuestionIndex < questionKeys.length - 1) {
+            setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+        } else {
+            // Handle the end of questions (optional)
+            console.log("No more questions!");
+        }
+    };
+
+    // const audioRef = useRef(null);
+
+    // Play the audio when the component is rendered or when the question changes
+    // useEffect(() => {
+    //     console.log("hi")
+    //     alert("hi")
+    //     if (audioSources[currentQuestionIndex]) {
+    //         console.log("hi")
+    //         audioRef.current.src = audioSources[currentQuestionIndex]; // Set the new audio source
+    //         audioRef.current.load(); // Load the new audio source
+    //         audioRef.current.play()
+    //             .then(() => {
+    //                 console.log('Audio is playing');
+    //             })
+    //             .catch((error) => {
+    //                 console.log('Error playing audio:', error);
+    //             });
+    //     }
+    // }, [audioRef]);
+
     return (
         <div style={{backgroundColor:"#b7cbf5", minHeight: "100vh"}}>
             <div >
@@ -162,8 +214,9 @@ function Simulation() {
                         {showCards && <InterviewerCards func={hideCards}/>}
                     </div>
                     <div>
-                        {showQuestion &&
-                            <Question question={"What motivated you to pursue a career in computer science?"} showCards={showCards} showVideo={showVideo} handleClickButton={handleClickButton} interviewId={interviewerId}/>
+                        {showQuestion && <Question question={questions[questionKeys[currentQuestionIndex]]} showCards={showCards}
+                                      showVideo={showVideo} handleClickButton={handleClickButton}
+                                      interviewId={interviewerId}/>
 
                         }
                     </div>
