@@ -41,6 +41,8 @@ function Simulation() {
     const [showQuestion, setQuestion] = useState(false);
     const [interviewerId, setInterviewerId] = useState(null);
     const [questions, setQuestions] = useState([]);
+    const [analysis, setAnalysis] = useState({});
+
 
 
     const moodApiCaller = async () => {
@@ -55,6 +57,20 @@ function Simulation() {
         const response_json = await response.json();
 
         console.log(response_json.results);
+    };
+
+    const recordApiCall = async () => {
+        const response = await fetch(`http://localhost:5000/record`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({language: "he-IL", question: "what is your career goal?", field:"computer science"})
+        });
+        //console.log(response);
+        const response_json = await response.json();
+        setAnalysis(response_json);
+        //console.log(response_json.results);
     };
 
       const submitApiCaller = async (interviewerId) => {
@@ -126,6 +142,11 @@ function Simulation() {
     const handleClickButton = () => {
         //next: call to evaluate answer if changes from true to false
         setVideo(!showVideo);
+        // calling record function from API
+        // if(showVideo){
+        //     alert("in handle clickkkkkk");
+        //     recordApiCall();
+        // }
     }
 
     // Function to stop the video after timer is zero
@@ -149,6 +170,15 @@ function Simulation() {
         }
     }, [interviewerId]);
 
+    useEffect(() => {
+        let content = {"disadvantage1": "The answer is not relevant to the question asked.",
+            "disadvantage2": "Lack of professionalism and clarity in the response."}
+        if (showVideo) {
+            recordApiCall();
+            //setAnalysis(content)
+        }
+    }, [showVideo]);
+
     return (
         <div style={{backgroundColor:"#b7cbf5", minHeight: "100vh"}}>
             <div >
@@ -163,7 +193,7 @@ function Simulation() {
                     </div>
                     <div>
                         {showQuestion &&
-                            <Question question={"What motivated you to pursue a career in computer science?"} showCards={showCards} showVideo={showVideo} handleClickButton={handleClickButton} interviewId={interviewerId}/>
+                            <Question question={"What motivated you to pursue a career in computer science?"} showCards={showCards} showVideo={showVideo} handleClickButton={handleClickButton} interviewId={interviewerId} answer={analysis} />
 
                         }
                     </div>

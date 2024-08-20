@@ -1,12 +1,10 @@
 # `pip3 install assemblyai` (macOS)
 # `pip install assemblyai` (Windows)
 
-import assemblyai as aai
 import pyaudio
 import wave
 import os
 import time
-from transformers import AutoProcessor, AutoModelForSpeechSeq2Seq
 
 from google.cloud import speech
 import io
@@ -27,7 +25,7 @@ output_path = os.path.join(os.getcwd(), OUTPUT_FILENAME)
 audio = pyaudio.PyAudio()
 
 
-def record():
+def record(language):
     # Open the audio stream
     stream = audio.open(format=FORMAT,
                         channels=CHANNELS,
@@ -69,10 +67,10 @@ def record():
     print(f"Audio saved to {output_path}")
     
     # Path to your audio file (must be in WAV format with LINEAR16 encoding)
-    transcribe_audio(output_path)
+    return transcribe_audio(output_path, language)
 
 
-def transcribe_audio(audio_file_path):
+def transcribe_audio(audio_file_path, language):
     # Initialize the client
     client = speech.SpeechClient()
 
@@ -85,17 +83,18 @@ def transcribe_audio(audio_file_path):
     config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,  # Adjust this based on your audio file
         sample_rate_hertz=44100,  # Adjust this if your file has a different sample rate
-        language_code="he-IL",  # Hebrew language code
+        language_code=language #"he-IL",  # Hebrew language code en-US
     )
 
     # Perform the transcription
     response = client.recognize(config=config, audio=audio)
-    print(response)
-    
+    answer = ""
+
     # Print the transcription
     for result in response.results:
-        print("Transcript: {}".format(result.alternatives[0].transcript))
-
+        answer += " " + result.alternatives[0].transcript
+        # print("Transcript: {}".format(result.alternatives[0].transcript))
+    return answer
 
 
 

@@ -7,8 +7,9 @@ import SpeakingCharacter from "./SpeakingCharacter";
 import RoundButton from "./RoundButton";
 import Box from '@mui/material/Box';
 import {useTranslation} from "react-i18next";
+import Analysis from "./Analysis";
 
-const Question = ({question, showCards, showVideo, handleClickButton, interviewId}) => {
+const Question = ({question, showCards, showVideo, handleClickButton, interviewId, answer}) => {
     let open_mouth_image, closed_mouth_img;
     const { t } = useTranslation();
 
@@ -53,6 +54,8 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
                 ) : (
                     <RoundButton onClick={handleClickButton}> Ready to Answer</RoundButton>
                 ))}
+            {!answer.isEmpty && <Analysis answer={answer}/>}
+
             <Button
                 style={{
                     position: 'absolute',
