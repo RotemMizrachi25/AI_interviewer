@@ -6,6 +6,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 from final_project_ai_interviewer import JobInterviewAI
+from final_project_ai_interviewer.JobInterviewAI import generate_questions
 
 app = Flask(__name__)
 CORS(app)
@@ -58,11 +59,11 @@ def submit_data():
     data = request.json
     interviewer_type = data.get('interviewerId')
     field = data.get('field')
-    print(interviewer_type, field)
-    # response = generate_questions(field, interviewer_type)
-    # print(response)
-    # return jsonify(response)
-    return jsonify("whats upp ")
+    print(interviewer_type,field)
+    response = generate_questions(field, interviewer_type)
+    #response = {"question1": " what did you do today"}
+    print(response)
+    return jsonify(response)
 
 
 @app.route('/affects', methods=['POST'])

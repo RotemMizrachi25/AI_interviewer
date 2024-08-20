@@ -83,11 +83,14 @@ def transcribe_audio(audio_file_path, language):
     config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,  # Adjust this based on your audio file
         sample_rate_hertz=44100,  # Adjust this if your file has a different sample rate
+
         language_code=language #"he-IL",  # Hebrew language code en-US
+
     )
 
     # Perform the transcription
     response = client.recognize(config=config, audio=audio)
+
     answer = ""
 
     # Print the transcription
@@ -97,7 +100,8 @@ def transcribe_audio(audio_file_path, language):
     return answer
 
 
-
+if __name__ == '__main__':
+    transcribe_audio(output_path)
 
 #
 # aai.settings.api_key = "65fc0f2131704cd5b303c28979e0f118"
