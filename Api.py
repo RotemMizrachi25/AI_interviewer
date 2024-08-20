@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from JobInterviewAI import generate_questions
 import matplotlib.pyplot as plt
 import io
 import base64
@@ -51,6 +52,15 @@ def recommendations():
 
     return jsonify({'recommendations': recommendations, 'yourData': data}), 200
 
+@app.route('/submit', methods=['POST'])
+def submit_data():
+    data = request.json
+    interviewer_type = data.get('interviewerId')
+    field = data.get('field')
+    print(interviewer_type,field)
+    response = generate_questions(field, interviewer_type)
+    print(response)
+    return jsonify(response)
 
 @app.route('/affects', methods=['POST'])
 def dominante_moods():
@@ -142,81 +152,6 @@ def emotion_graph():
     img_base64 = base64.b64encode(img.getvalue()).decode('utf8')
 
     return jsonify({'emotion_graph': img_base64, 'yourData': data}), 200
-
-"""
-machine learning 
-"""
-"""
-# Define typical emotional profiles for successful and unsuccessful candidates
-successful_profile = {
-    'happiness': 0.8,
-    'sadness': 0.1,
-    'fear': 0.2,
-    'disgust': 0.1,
-    'anger': 0.1,
-    'surprise': 0.3
-}
-
-unsuccessful_profile = {
-    'happiness': 0.3,
-    'sadness': 0.4,
-    'fear': 0.6,
-    'disgust': 0.5,
-    'anger': 0.5,
-    'surprise': 0.2
-}
-
-# Generate synthetic data
-def generate_data(profile, label, n_samples=100):
-    data = []
-    for _ in range(n_samples):
-        sample = {key: np.clip(np.random.normal(value, 0.1), 0, 1) for key, value in profile.items()}
-        sample['success'] = label
-        data.append(sample)
-    return data
-
-# Generate 100 samples for successful and unsuccessful candidates
-successful_data = generate_data(successful_profile, 1, n_samples=100)
-unsuccessful_data = generate_data(unsuccessful_profile, 0, n_samples=100)
-
-# Combine data and create DataFrame
-data = pd.DataFrame(successful_data + unsuccessful_data)
-
-# Prepare features and labels
-X = data.drop('success', axis=1)
-y = data['success']
-
-# Split data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Standardize features
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-# Train logistic regression model
-model = LogisticRegression()
-model.fit(X_train_scaled, y_train)
-
-# Predict success
-@app.route('/predict_success', methods=['POST'])
-def predict_success():
-    data = request.get_json()
-    if not data:
-        return jsonify({'error': 'No data received'}), 400
-    
-    candidate_profile = pd.DataFrame([data['affects'][0]])
-    candidate_profile_scaled = scaler.transform(candidate_profile)
-    
-    success_prob = model.predict_proba(candidate_profile_scaled)[0][1]
-    
-    return jsonify({'success_probability': success_prob, 'yourData': data}), 200
-
-# Example: Evaluate model accuracy
-y_pred = model.predict(X_test_scaled)
-accuracy = accuracy_score(y_test, y_pred)
-print(f"Model accuracy: {accuracy}")
-"""
 
 if __name__ == '__main__':
     app.run(port=5000)

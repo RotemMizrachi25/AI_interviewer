@@ -8,7 +8,7 @@ client = OpenAI(api_key=openai_password)
 
 
 def generate_chat_call(user_message, flag, temprature=1):
-    if flag == "friendly":
+    if flag == 3:
         #system_message = ("You are a friendly interviewer.The tone should be warm, "
                     #      "supportive, and encouraging, designed to make the candidate feel comfortable and engaged.")
         system_message = (
@@ -16,7 +16,7 @@ def generate_chat_call(user_message, flag, temprature=1):
             "Ask questions that focus on the candidate's passions, their motivations, and how they fit into the team culture. "
             "The tone should be warm, supportive, and conversational."
         )
-    elif flag == "strict":
+    elif flag == 0:
         #system_message = ("You are a strict interviewer. Focus on a formal and direct approach."
                         #  " The tone should be serious and no-nonsense.")
         system_message = (
@@ -24,7 +24,7 @@ def generate_chat_call(user_message, flag, temprature=1):
             "Focus on asking challenging questions that reveal weaknesses, test resilience, and assess how the candidate handles criticism and tough situations. "
             "The tone should be formal, direct, and demanding."
         )
-    elif flag == "technical":
+    elif flag == 2:
        #system_message = ("You are a technical interviewer.focus on in-depth technical knowledge and problem-solving abilities."
         #                  " ask challenging questions related to the technical aspects of the job."
          #                 " Maintain a precise and analytical tone, suited for evaluating the candidate’s technical")
@@ -129,6 +129,21 @@ def synthesize_text(text, output_file):
     with open(output_file, "wb") as out:
         out.write(response.audio_content)
         print(f'Audio content written to "{output_file}"')
+
+def generate_questions(field, interviewerID):
+    questions = question_generator_temp(field, interviewerID)
+    questions_dict = json.loads(questions)
+    questions_iterator = iter(questions_dict.items())
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./inspiring-team-386523-29d458586b76.json"
+    i = 1
+    for key, value in questions_iterator:
+        text_to_synthesize = f"{key} {value}"
+        output_file_path = f"output{i}.mp3"
+        synthesize_text(text_to_synthesize, output_file_path)
+        i += 1
+    return questions_dict
+
+
 
 if __name__ == '__main__':
     print("strict")

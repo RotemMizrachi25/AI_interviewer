@@ -56,6 +56,21 @@ function Simulation() {
         console.log(response_json.results);
     };
 
+      const submitApiCaller = async (interviewerId) => {
+        const response = await fetch(`http://localhost:5000/submit`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({interviewerId: interviewerId, field: "computer science"})
+        });
+
+        const response_json = await response.json();
+        console.log(response_json);
+        console.log(response_json['question1']);
+    };
+
+
 
     const engageApiCaller = async (fieldName, field) => {
         const response = await fetch(`http://localhost:5000/${fieldName}`,{
@@ -67,8 +82,7 @@ function Simulation() {
         });
 
         const response_json = await response.json();
-        console.log(response_json.results);
-
+        console.log(response_json.results)
     };
 
     const handleMoodData = (newAffects) => {
@@ -127,6 +141,12 @@ function Simulation() {
         //generate the interview questions
         setQuestion(true);
     };
+
+    useEffect(() => {
+        if (interviewerId != null) {
+            submitApiCaller(interviewerId);
+        }
+    }, [interviewerId]);
 
     return (
         <div style={{backgroundColor:"#b7cbf5", minHeight: "100vh"}}>
