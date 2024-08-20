@@ -1,15 +1,18 @@
 import Box from "@mui/material/Box";
 import React from "react";
 import Typography from "@mui/material/Typography";
+import { useTranslation } from 'react-i18next';
+
 
 export  function Home(){
+    const { t } = useTranslation();
     return(
         <>
             <br/>
             <br/>
             <br/>
-            <Typography variant="h2" align="center" gutterBottom color="darkblue" fontWeight={900} fontFamily={'Nunito'}>
-                welcome to AI Job Interview Assistant
+            <Typography variant="h2" align="center" gutterBottom color="darkblue" fontWeight={900}>
+                {t('welcome_message')}
             </Typography>
             <Box
 

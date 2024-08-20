@@ -40,6 +40,7 @@ function Simulation() {
     const [showCards, setCards] = useState(true);
     const [showQuestion, setQuestion] = useState(false);
     const [interviewerId, setInterviewerId] = useState(null);
+    const [questions, setQuestions] = useState([]);
 
 
     const moodApiCaller = async () => {

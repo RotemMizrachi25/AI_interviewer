@@ -3,16 +3,17 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter, createBrowserRouter, Router, RouterProvider} from 'react-router-dom';
-import Nav from "./nav";
-import {Outlet} from "react-router-dom"
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <React.StrictMode>
-            <App />
-    </React.StrictMode>
+    <I18nextProvider i18n={i18n}>
+        <React.StrictMode>
+                <App />
+        </React.StrictMode>
+    </I18nextProvider>
 );
 
 // export function Layout(){
