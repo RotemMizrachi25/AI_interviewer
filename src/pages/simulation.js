@@ -40,6 +40,9 @@ function Simulation() {
     const [showCards, setCards] = useState(true);
     const [showQuestion, setQuestion] = useState(false);
     const [interviewerId, setInterviewerId] = useState(null);
+
+    const [analysis, setAnalysis] = useState({});
+
     const [questions, setQuestions] = useState({});
     const [questionKeys,setQuestionkeys] = useState([]);
     const audioSources = [
@@ -61,6 +64,20 @@ function Simulation() {
         const response_json = await response.json();
 
         console.log(response_json.results);
+    };
+
+    const recordApiCall = async () => {
+        const response = await fetch(`http://localhost:5000/record`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({language: "he-IL", question: "what is your career goal?", field:"computer science"})
+        });
+        //console.log(response);
+        const response_json = await response.json();
+        setAnalysis(response_json);
+        //console.log(response_json.results);
     };
 
       const submitApiCaller = async (interviewerId) => {
@@ -132,6 +149,11 @@ function Simulation() {
     const handleClickButton = () => {
         //next: call to evaluate answer if changes from true to false
         setVideo(!showVideo);
+        // calling record function from API
+        // if(showVideo){
+        //     alert("in handle clickkkkkk");
+        //     recordApiCall();
+        // }
     }
 
     // Function to stop the video after timer is zero
@@ -162,6 +184,15 @@ function Simulation() {
             submitApiCaller(interviewerId);
         }
     }, [interviewerId]);
+
+
+    useEffect(() => {
+
+        if (showVideo) {
+            recordApiCall();
+            //setAnalysis(content)
+        }
+    }, [showVideo]);
 
      useEffect(() => {
         if (questions != null) {
@@ -201,6 +232,7 @@ function Simulation() {
     //     }
     // }, [audioRef]);
 
+
     return (
         <div style={{backgroundColor:"#b7cbf5", minHeight: "100vh"}}>
             <div >
@@ -214,9 +246,11 @@ function Simulation() {
                         {showCards && <InterviewerCards func={hideCards}/>}
                     </div>
                     <div>
+
                         {showQuestion && <Question question={questions[questionKeys[currentQuestionIndex]]} showCards={showCards}
                                       showVideo={showVideo} handleClickButton={handleClickButton}
-                                      interviewId={interviewerId}/>
+                                      interviewId={interviewerId} answer={analysis}/>
+
 
                         }
                     </div>

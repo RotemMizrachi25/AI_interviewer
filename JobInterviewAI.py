@@ -1,6 +1,7 @@
 import os
 from openai import OpenAI
 import json
+from google.cloud import texttospeech
 # Retrieve the password from the environment variable
 openai_password = os.getenv('OPENAI_PASSWORD')
 
@@ -101,7 +102,7 @@ def content_analyzer(field, question, answer):
                    f"[revised answer]:[the revised answer]"
     return generate_chat_call(user_massage, 0.9)
 
-from google.cloud import texttospeech
+
 
 def synthesize_text(text, output_file):
     # Initialize the client

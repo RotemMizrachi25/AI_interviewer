@@ -1,17 +1,17 @@
+import base64
+import io
+
+import matplotlib.pyplot as plt
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from JobInterviewAI import generate_questions
-import matplotlib.pyplot as plt
-import io
-import base64
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score
+
+from final_project_ai_interviewer import JobInterviewAI
+from final_project_ai_interviewer.JobInterviewAI import generate_questions
+
 app = Flask(__name__)
 CORS(app)
+import speechTotext
+
 
 @app.route('/weighted_emotions', methods=['POST'])
 def weighted_emotions():
@@ -27,12 +27,13 @@ def weighted_emotions():
     data = request.get_json()
     if not data:
         return jsonify({'error': 'No data received'}), 400
-    
+
     for key, val in data['affects'][0].items():
         if key in weights:
             weighted_score += val * weights[key]
-    
+
     return jsonify({'weighted_score': weighted_score, 'yourData': data}), 200
+
 
 @app.route('/recommendations', methods=['POST'])
 def recommendations():
@@ -40,9 +41,9 @@ def recommendations():
     data = request.get_json()
     if not data:
         return jsonify({'error': 'No data received'}), 400
-    
+
     dominant_emotions = [key for key, val in data['affects'][0].items() if val > 0.5]
-    
+
     if 'fear' in dominant_emotions or 'anxiety' in dominant_emotions:
         recommendations.append('Take a deep breath and try to relax.')
     if 'happiness' in dominant_emotions:
@@ -51,6 +52,7 @@ def recommendations():
         recommendations.append('Try to focus on positive thoughts.')
 
     return jsonify({'recommendations': recommendations, 'yourData': data}), 200
+
 
 @app.route('/submit', methods=['POST'])
 def submit_data():
@@ -63,6 +65,7 @@ def submit_data():
     print(response)
     return jsonify(response)
 
+
 @app.route('/affects', methods=['POST'])
 def dominante_moods():
     dominante = []
@@ -73,14 +76,15 @@ def dominante_moods():
     print("Received data:", data)  # Log the received data
     print(type(data), type(data['affects'][0]))
 
-    for key,val in data['affects'][0].items():
+    for key, val in data['affects'][0].items():
         if val > 0.5:
             dominante.append(key)
 
     print("dominate feelings are: " + ", ".join(dominante))
-        
+
     # Example: return received data or some processed result
     return jsonify({'message': 'Data processed', 'yourData': data}), 200
+
 
 @app.route('/valence', methods=['POST'])
 def valence():
@@ -92,14 +96,33 @@ def valence():
     print("Received data:", data)  # Log the received data
     print(type(data), type(data['affects'][0]))
 
-    for key,val in data['affects'][0].items():
+    for key, val in data['affects'][0].items():
         if val > 0.5:
             dominante.append(key)
 
     print("dominate feelings are: " + ", ".join(dominante))
-        
+
     # Example: return received data or some processed result
     return jsonify({'message': 'Data processed', 'yourData': data}), 200
+
+
+@app.route('/record', methods=['POST'])
+def recorder():
+    data = request.get_json()  # This will get the JSON data sent with the POST
+    if not data:
+        return jsonify({'error': 'No data received'}), 400
+
+    print("Received data:", data)  # Log the received data
+    # call function to analyze the content 
+    answer = speechTotext.record(data["language"])
+    print(answer)
+    analysis = JobInterviewAI.content_analyzer(data["field"], data["question"], answer)
+    print(analysis)
+    return analysis
+
+    # Example: return received data or some processed result
+    return jsonify({'message': 'Data processed', 'yourData': data}), 200
+
 
 @app.route('/arousel', methods=['POST'])
 def arousel():
@@ -114,6 +137,7 @@ def arousel():
     # Example: return received data or some processed result
     return jsonify({'message': 'Data processed', 'yourData': data}), 200
 
+
 @app.route('/attention', methods=['POST'])
 def attention():
     data = request.get_json()  # This will get the JSON data sent with the POST
@@ -127,9 +151,9 @@ def attention():
     percentage = (count / total) * 100
     print("you had your attention to the interview " + percentage + "precent of the time")
 
-        
     # Example: return received data or some processed result
     return jsonify({'message': 'Data processed', 'yourData': data}), 200
+
 
 @app.route('/emotion_graph', methods=['POST'])
 def emotion_graph():
@@ -153,6 +177,7 @@ def emotion_graph():
     img_base64 = base64.b64encode(img.getvalue()).decode('utf8')
 
     return jsonify({'emotion_graph': img_base64, 'yourData': data}), 200
+
 
 if __name__ == '__main__':
     app.run(port=5000)
