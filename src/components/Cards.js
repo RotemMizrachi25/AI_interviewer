@@ -4,13 +4,15 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import {Button, CardActionArea, CardActions, Grid} from '@mui/material';
+import {useTranslation} from "react-i18next";
 //rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}
 
 export default function InterviewerCards({func}) {
+    const { t } = useTranslation();
     return (
         <>
             <Typography variant="h3" align="center" gutterBottom color="darkblue" fontWeight={900}>
-                Choose Your Interviewer
+                {t("cards_title")}
             </Typography>
             <Grid container spacing={2} justifyContent="center" alignItems="center" margin="20px">
                 <Grid item xs={12} sm={3}>
@@ -38,7 +40,7 @@ export default function InterviewerCards({func}) {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small" onClick={()=> func({ interviewerId: 0 })}>Start</Button>
+                                <Button size="small" onClick={()=> func({ interviewerId: 0 })}>{t("start_simulation_card")}</Button>
                             </CardActions>
                         </CardActionArea>
                     </Card>
@@ -68,7 +70,7 @@ export default function InterviewerCards({func}) {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small" onClick={()=> func({ interviewerId: 1 })}>Start</Button>
+                                <Button size="small" onClick={()=> func({ interviewerId: 1 })}>{t("start_simulation_card")}</Button>
                             </CardActions>
                         </CardActionArea>
                     </Card>
@@ -98,7 +100,7 @@ export default function InterviewerCards({func}) {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small" onClick={()=> func({ interviewerId: 2 })}>Start</Button>
+                                <Button size="small" onClick={()=> func({ interviewerId: 2 })}>{t("start_simulation_card")}</Button>
                             </CardActions>
                         </CardActionArea>
                     </Card>
@@ -128,7 +130,7 @@ export default function InterviewerCards({func}) {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small" onClick={()=> func({ interviewerId: 3})}>Start</Button>
+                                <Button size="small" onClick={()=> func({ interviewerId: 3})}>{t("start_simulation_card")}</Button>
                             </CardActions>
                         </CardActionArea>
                     </Card>

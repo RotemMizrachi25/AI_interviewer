@@ -6,9 +6,12 @@ import React from "react";
 import SpeakingCharacter from "./SpeakingCharacter";
 import RoundButton from "./RoundButton";
 import Box from '@mui/material/Box';
+import {useTranslation} from "react-i18next";
 
 const Question = ({question, showCards, showVideo, handleClickButton, interviewId}) => {
     let open_mouth_image, closed_mouth_img;
+    const { t } = useTranslation();
+
     if(interviewId === 0){
         open_mouth_image = "assets_images/tought_c.png";
         closed_mouth_img = "assets_images/tought_o.png";
@@ -36,8 +39,8 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
                  alignItems: 'center',
                  gap: 2  // Adds consistent spacing between each child component
              }}>
-            <Typography variant="h3" align="left" gutterBottom color="darkblue" fontWeight={900} fontFamily={'Nunito'}>
-                Next Question:
+            <Typography variant="h3" align="left" gutterBottom color="darkblue" fontWeight={900}>
+                {t("simulation_title")}
             </Typography>
             <SpeechBalloon>{question}</SpeechBalloon>
             <SpeakingCharacter
@@ -58,7 +61,7 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
                     //transform: 'translateY(-50%)', // Center vertically
                     color:'darkblue'
                 }}
-            >Skip Question<BsSkipEndFill/></Button>
+            >{t('skip_button')}<BsSkipEndFill/></Button>
         </Box>
     )}
 

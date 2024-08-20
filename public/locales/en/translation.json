@@ -1,0 +1,9 @@
+{
+  "welcome_message": "welcome to AI Job Interview Assistant",
+  "cards_title": "Choose Your Interviewer",
+  "simulation_title": "Next Question:",
+  "home": "Home",
+  "start": "Start",
+  "skip_button": "skip question",
+  "start_simulation_card": "start"
+}

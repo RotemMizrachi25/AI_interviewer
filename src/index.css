@@ -7,6 +7,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+:lang(he) {
+  font-family: 'Varela Round', sans-serif; /* Font for Hebrew */
+}
+
 code {
   font-family: 'Nunito', source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

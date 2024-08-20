@@ -3,11 +3,14 @@ import { cyan } from '@mui/material/colors';
 import {useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
 // "use client"
+import { useTranslation } from 'react-i18next';
+import i18n from "i18next";
+import LanguageSwitcher from "./components/languageSwitcher";
 
 
 
 const Nav = () => {
-
+    const { t } = useTranslation();
 
     const [value, setValue] = useState(0);
 
@@ -40,9 +43,9 @@ const Nav = () => {
                         value={value}
                         onChange={(e, value) => handleChange}
                         indicatorColor="primary">
-                        <Tab label="Home" component={Link} to="/" />
-                        <Tab label="Start" component={Link} to="/simulation" />
-                        <Tab label="Page 1" component={Link} to="/page1" />
+                        <Tab label={t('home')} component={Link} to="/" />
+                        <Tab label={t('start')} component={Link} to="/simulation" />
+                        <LanguageSwitcher/>
                     </Tabs>
                 </Toolbar>
             </AppBar>
