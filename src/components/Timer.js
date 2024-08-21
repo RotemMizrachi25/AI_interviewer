@@ -5,7 +5,7 @@ import { CgSandClock } from "react-icons/cg";
 
 
 const Timer = ({onTimerEnd}) => {
-    const [timeLeft, setTimeLeft] = useState(10000); // Initialize with 2 minutes in milliseconds
+    const [timeLeft, setTimeLeft] = useState(30000); // Initialize with 2 minutes in milliseconds
 
     useEffect(() => {
         const deadline = Date.now() + 10000; // 2 minutes from now

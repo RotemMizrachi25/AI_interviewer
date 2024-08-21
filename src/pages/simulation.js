@@ -23,6 +23,7 @@ import {Button} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Question from "../components/Question";
 import SpeakingCharacter from "../components/SpeakingCharacter";
+import { ClipLoader } from 'react-spinners';
 
 function Simulation() {
 
@@ -42,7 +43,7 @@ function Simulation() {
     const [interviewerId, setInterviewerId] = useState(null);
 
     const [analysis, setAnalysis] = useState({});
-
+    const [isLoading, setIsLoading] = useState(false);
     const [questions, setQuestions] = useState({});
     const [questionKeys,setQuestionkeys] = useState([]);
     const audioSources = [
@@ -91,9 +92,19 @@ function Simulation() {
 
         const response_json = await response.json();
         console.log(response_json);
-        setQuestions(response_json)
+        setQuestions(response_json);
+        // setIsLoading(false);
+        // setQuestion(true);
     };
 
+      useEffect(() => {
+    // This effect will run when `questions` state changes
+        if (questions && Object.keys(questions).length > 0) {
+            // Now, proceed with the next steps
+            setIsLoading(false);
+            setQuestion(true);
+        }
+      }, [questions])
 
 
     const engageApiCaller = async (fieldName, field) => {
@@ -109,40 +120,40 @@ function Simulation() {
         console.log(response_json.results)
     };
 
-    const handleMoodData = (newAffects) => {
-        setAffects(affects => [...affects, newAffects]);
-    };
+    // const handleMoodData = (newAffects) => {
+    //     setAffects(affects => [...affects, newAffects]);
+    // };
 
-    const handleArousalValencData = (newArousal, newValence) => {
-        setArousal(arousal => [...arousal, newArousal]);
-        setValence(valence => [...valence, newValence]);
-    }
-    const handleAttentionData = (newAttention) => {
-        setAttention(attention => [...attention, newAttention]);
-    }
+    // const handleArousalValencData = (newArousal, newValence) => {
+    //     setArousal(arousal => [...arousal, newArousal]);
+    //     setValence(valence => [...valence, newValence]);
+    // }
+    // const handleAttentionData = (newAttention) => {
+    //     setAttention(attention => [...attention, newAttention]);
+    // }
 
 
+    //
+    // useEffect(() => {
+    //     console.log("MoodData from comp: ", affects);
+    //     if(affects.length === 120){
+    //         console.log("Type MoodData:", typeof moodData);
+    //         moodApiCaller();
+    //     }
+    // }, [affects]);
 
-    useEffect(() => {
-        console.log("MoodData from comp: ", affects);
-        if(affects.length === 120){
-            console.log("Type MoodData:", typeof moodData);
-            moodApiCaller();
-        }
-    }, [affects]);
-
-    useEffect(() => {
-        console.log("EngageData from comp: ", arousal, valence, attention);
-        if(arousal.length === 120){
-            engageApiCaller("arousal", arousal);
-        }
-        if(valence.length === 120){
-            engageApiCaller("valence", valence);
-        }
-        if(attention.length === 400){
-            engageApiCaller("attention", attention);
-        }
-    }, [arousal, valence, attention]);
+    // useEffect(() => {
+    //     console.log("EngageData from comp: ", arousal, valence, attention);
+    //     if(arousal.length === 120){
+    //         engageApiCaller("arousal", arousal);
+    //     }
+    //     if(valence.length === 120){
+    //         engageApiCaller("valence", valence);
+    //     }
+    //     if(attention.length === 400){
+    //         engageApiCaller("attention", attention);
+    //     }
+    // }, [arousal, valence, attention]);
 
 
 
@@ -162,13 +173,6 @@ function Simulation() {
         //call to evaluate answer function
     };
 
-     useEffect(() => {
-        audioSources.forEach((src) => {
-            const audio = new Audio(src);
-            audio.preload = "auto";
-        });
-    }, [audioSources]);
-
 
     // Function to hide the cards after choosing an interviewer
     const hideCards = ({interviewerId}) => {
@@ -176,7 +180,12 @@ function Simulation() {
         setInterviewerId(interviewerId);
         alert(interviewerId);
         //generate the interview questions
-        setQuestion(true);
+        setIsLoading(true);
+    //     setTimeout(() => {
+    //     // After 15 seconds, stop loading and show the question
+    //         setIsLoading(false);
+    //         setQuestion(true);
+    // }, 30000); // 15,000 milliseconds = 15 seconds
     };
 
     useEffect(() => {
@@ -235,26 +244,35 @@ function Simulation() {
 
     return (
         <div style={{backgroundColor:"#b7cbf5", minHeight: "100vh"}}>
-            <div >
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
+            <div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
 
-                    <div style={{display:"flex", flexDirection: "column", alignItems:"center"}}>
-                        {showCards && <InterviewerCards func={hideCards}/>}
-                    </div>
-                    <div>
+                <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                    {showCards && <InterviewerCards func={hideCards}/>}
+                </div>
+                <div>
+                    {isLoading &&
+                            <div>
+                                <ClipLoader size={50} color={"#123abc"} loading={isLoading}/>
+                                <p>Loading... Please wait</p>
+                            </div>}
+                </div>
+                <div>
 
-                        {showQuestion && <Question question={questions[questionKeys[currentQuestionIndex]]} showCards={showCards}
-                                      showVideo={showVideo} handleClickButton={handleClickButton}
-                                      interviewId={interviewerId} answer={analysis}/>
+
+                            {showQuestion &&
+                                <Question question={questions[questionKeys[currentQuestionIndex]]} showCards={showCards}
+                                          showVideo={showVideo} handleClickButton={handleClickButton}
+                                          interviewId={interviewerId} answer={analysis}/>
 
 
-                        }
-                    </div>
-                    <br/>
+                            }
+                        </div>
+                        <br/>
                     {/*<hr className="solid" style={{width:"100%", color:"darkblue", backgroundColor:"darkblue", height:2}}></hr>*/}
 
                     {/*{!showCards && (*/}
@@ -264,24 +282,27 @@ function Simulation() {
                     {/*        <RoundButton onClick={handleClickButton}> Ready to Answer</RoundButton>*/}
                     {/*    ))}*/}
 
-                    {!showCards && showVideo && <VideoComponent showVideo={showVideo} aiSdkState={aiSdkState} mphToolsState={mphToolsState} onTimerEnd={stopVideo}/>}
-                    {/*<GenderComponent></GenderComponent>*/}
-                    {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                    {/*<DominantEmotionComponent></DominantEmotionComponent>*/}
-                    {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                    {/*<AgeComponent></AgeComponent>*/}
-                    {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                    {/*<FeatureComponent></FeatureComponent>*/}
-                    {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                    {/*<EngagementComponent onDataAttention={handleAttentionData} onDataArousalValence={handleArousalValencData}/>*/}
-                    {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                    {/*<MoodComponent onDataRecieve={handleMoodData}/>*/}
-                    {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                    {/*<EmotionBarsComponent></EmotionBarsComponent>*/}
-                    {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                </div>
+                    {!showCards && showVideo && <VideoComponent showVideo={showVideo} aiSdkState={aiSdkState}
+                                                                                      mphToolsState={mphToolsState}
+                                                                                      onTimerEnd={stopVideo}/>
+                }
+                {/*<GenderComponent></GenderComponent>*/}
+                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
+                {/*{showVideo && <DominantEmotionComponent></DominantEmotionComponent>}*/}
+                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
+                {/*<AgeComponent></AgeComponent>*/}
+                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
+                {/*{showVideo && <FeatureComponent></FeatureComponent>}*/}
+                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
+                {/*{showVideo && <EngagementComponent onDataAttention={handleAttentionData} onDataArousalValence={handleArousalValencData}/>}*/}
+                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
+                {/*{showVideo && <MoodComponent onDataRecieve={handleMoodData}/>}*/}
+                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
+                {/*{showVideo && <EmotionBarsComponent></EmotionBarsComponent>}*/}
+                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
+            </div>
         </div>
-    );
+);
 }
 
 export default Simulation;

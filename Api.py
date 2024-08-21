@@ -1,17 +1,16 @@
 import base64
 import io
-
+import os
 import matplotlib.pyplot as plt
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,send_from_directory
 from flask_cors import CORS
-
-from final_project_ai_interviewer import JobInterviewAI
-from final_project_ai_interviewer.JobInterviewAI import generate_questions
+from JobInterviewAI import generate_questions,content_analyzer
 
 app = Flask(__name__)
 CORS(app)
 import speechTotext
 
+FILE_DIRECTORY = os.getcwd()
 
 @app.route('/weighted_emotions', methods=['POST'])
 def weighted_emotions():
@@ -116,7 +115,7 @@ def recorder():
     # call function to analyze the content 
     answer = speechTotext.record(data["language"])
     print(answer)
-    analysis = JobInterviewAI.content_analyzer(data["field"], data["question"], answer)
+    analysis = content_analyzer(data["field"], data["question"], answer)
     print(analysis)
     return analysis
 
@@ -153,6 +152,10 @@ def attention():
 
     # Example: return received data or some processed result
     return jsonify({'message': 'Data processed', 'yourData': data}), 200
+
+@app.route('/media/<path:filename>')
+def serve_file(filename):
+    return send_from_directory(FILE_DIRECTORY, filename)
 
 
 @app.route('/emotion_graph', methods=['POST'])

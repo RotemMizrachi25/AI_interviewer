@@ -12,6 +12,10 @@ import Analysis from "./Analysis";
 const Question = ({question, showCards, showVideo, handleClickButton, interviewId, answer}) => {
     let open_mouth_image, closed_mouth_img;
     const { t } = useTranslation();
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const audioRef = useRef(null);
+    const [isSpeaking, setIsSpeaking] = useState(false);
+    const audioUrl = `http://localhost:5000/media/output${currentQuestionIndex+1}.mp3`;
 
     if(interviewId === 0){
         open_mouth_image = "assets_images/tought_c.png";
@@ -30,14 +34,15 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
         closed_mouth_img = "assets_images/friendly_o.png";
     }
 
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const audioRef = useRef(null);
-    const [isSpeaking, setIsSpeaking] = useState(false);
-    const audioSources = [
-        "/output1.mp3", // for index 0
-        "/output2.mp3", // for index 1
-        "/output3.mp3", // for index
-    ];
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (audio) {
+            audio.play().catch(error => {
+                console.error("Error playing audio:", error);
+            });
+        }
+    }, []);
+
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -63,20 +68,6 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
         };
     }, []);
 
-    useEffect(() => {
-        if (audioSources[currentQuestionIndex]) {
-            console.log("hi")
-            audioRef.current.src = audioSources[currentQuestionIndex]; // Set the new audio source
-            audioRef.current.load(); // Load the new audio source
-            audioRef.current.play()
-                .then(() => {
-                    console.log('Audio is playing');
-                })
-                .catch((error) => {
-                    console.log('Error playing audio:', error);
-                });
-        }
-    }, []);
 
     return(
         <Box
@@ -109,7 +100,7 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
 
 
             <div>
-                <audio ref={audioRef}/>
+                <audio ref={audioRef} controls src={audioUrl}/>
             </div>
 
             <Button

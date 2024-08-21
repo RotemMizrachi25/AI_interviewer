@@ -139,7 +139,7 @@ def generate_questions(field, interviewerID):
     i = 1
     for key, value in questions_iterator:
         text_to_synthesize = f"{key} {value}"
-        output_file_path = f"public/output{i}.mp3"
+        output_file_path = f"output{i}.mp3"
         synthesize_text(text_to_synthesize, output_file_path)
         i += 1
     return questions_dict
