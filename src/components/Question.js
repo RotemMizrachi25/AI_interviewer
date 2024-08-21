@@ -17,20 +17,20 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
     const audioUrl = `http://localhost:5000/media/output${currentQuestionIndex+1}.mp3`;
 
     if(interviewId === 0){
-        open_mouth_image = "assets_images/tought_c.png";
-        closed_mouth_img = "assets_images/tought_o.png";
+        open_mouth_image = "assets_images/tought_o.png";
+        closed_mouth_img = "assets_images/tought_c.png";
     }
     else if(interviewId === 1){
         open_mouth_image = "assets_images/psy_o.png";
         closed_mouth_img = "assets_images/psy_c.png";
     }
     else if(interviewId === 2){
-        open_mouth_image = "assets_images/nerd_c.png";
-        closed_mouth_img = "assets_images/nerd_o.png";
+        open_mouth_image = "assets_images/nerd_o.png";
+        closed_mouth_img = "assets_images/nerd_c.png";
     }
     else{
-        open_mouth_image = "assets_images/friendly_c.png";
-        closed_mouth_img = "assets_images/friendly_o.png";
+        open_mouth_image = "assets_images/friendly_o.png";
+        closed_mouth_img = "assets_images/friendly_c.png";
     }
 
     useEffect(() => {
@@ -110,6 +110,7 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
                     //transform: 'translateY(-50%)', // Center vertically
                     color:'darkblue'
                 }}
+                onClick={handleNextQuestion}
             >{t('skip_button')}<BsSkipEndFill/></Button>
         </Box>
     )};

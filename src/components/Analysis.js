@@ -92,7 +92,7 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
                                 </Typography>
                                 <Typography variant="body1" color="text.secondary">
                                     <li>
-                                        {currentAnswer["suggestion1"]}
+                                        {currentAnswer["revised answer"]}
                                     </li>
                                 </Typography>
                             </CardContent>

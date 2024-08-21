@@ -41,7 +41,8 @@ function Simulation() {
     const [showCards, setCards] = useState(true);
     const [showQuestion, setQuestion] = useState(false);
     const [interviewerId, setInterviewerId] = useState(null);
-
+    const [role,setRole]=useState('')
+    const [selectedField,setSelectedField]=useState('')
     const [analysis, setAnalysis] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [questions, setQuestions] = useState({});
@@ -81,13 +82,13 @@ function Simulation() {
         //console.log(response_json.results);
     };
 
-      const submitApiCaller = async (interviewerId) => {
+      const submitApiCaller = async (interviewerId,selectedfield,role) => {
         const response = await fetch(`http://localhost:5000/submit`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({interviewerId: interviewerId, field: "computer science"})
+            body: JSON.stringify({interviewerId: interviewerId, field: selectedfield, role : role})
         });
 
         const response_json = await response.json();
@@ -175,10 +176,14 @@ function Simulation() {
 
 
     // Function to hide the cards after choosing an interviewer
-    const hideCards = ({interviewerId}) => {
+    const hideCards = ({interviewerId,selectedField,role}) => {
         setCards(false);
         setInterviewerId(interviewerId);
+        setRole(role);
+        setSelectedField(selectedField)
         alert(interviewerId);
+        alert(role);
+        alert(selectedField);
         //generate the interview questions
         setIsLoading(true);
     //     setTimeout(() => {
@@ -190,7 +195,7 @@ function Simulation() {
 
     useEffect(() => {
         if (interviewerId != null) {
-            submitApiCaller(interviewerId);
+            submitApiCaller(interviewerId,selectedField,role);
         }
     }, [interviewerId])
 
@@ -205,7 +210,6 @@ function Simulation() {
 
      useEffect(() => {
         if (questions) {
-            console.log(Object.keys(questions));
             const Keys = ['question 1', 'question 2','question 3','question 4','question 5','question 6','question 7','question 8','question 9','question 10','question 11','question 12','question 13','question 14','question 15']
             //const questionKeys = setQuestionkeys(Object.keys(questions)); // Extract keys from the dictionary
             setQuestionkeys(Keys)
