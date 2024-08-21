@@ -192,7 +192,7 @@ function Simulation() {
         if (interviewerId != null) {
             submitApiCaller(interviewerId);
         }
-    }, [interviewerId]);
+    }, [interviewerId])
 
 
     useEffect(() => {
@@ -204,8 +204,12 @@ function Simulation() {
     }, [showVideo]);
 
      useEffect(() => {
-        if (questions != null) {
-            const questionKeys = setQuestionkeys(Object.keys(questions)); // Extract keys from the dictionary
+        if (questions) {
+            console.log(Object.keys(questions));
+            const Keys = ['question 1', 'question 2','question 3','question 4','question 5','question 6','question 7','question 8','question 9','question 10','question 11','question 12','question 13','question 14','question 15']
+            //const questionKeys = setQuestionkeys(Object.keys(questions)); // Extract keys from the dictionary
+            setQuestionkeys(Keys)
+            console.log(questionKeys);
         }
     }, [questions]);
 
@@ -213,12 +217,8 @@ function Simulation() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
     const handleNextQuestion = () => {
-        if (currentQuestionIndex < questionKeys.length - 1) {
-            setCurrentQuestionIndex(prevIndex => prevIndex + 1);
-        } else {
-            // Handle the end of questions (optional)
-            console.log("No more questions!");
-        }
+        setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+        console.log(currentQuestionIndex)
     };
 
     // const audioRef = useRef(null);
@@ -255,19 +255,26 @@ function Simulation() {
                     {showCards && <InterviewerCards func={hideCards}/>}
                 </div>
                 <div>
-                    {isLoading &&
-                            <div>
-                                <ClipLoader size={50} color={"#123abc"} loading={isLoading}/>
-                                <p>Loading... Please wait</p>
-                            </div>}
-                </div>
+                   {isLoading && (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100vh',
+                        flexDirection: 'column'
+                    }}>
+                        <ClipLoader size={50} color={"#123abc"} loading={isLoading} />
+                        <p>Loading... Please wait</p>
+                    </div>)}
+                    </div>
                 <div>
 
 
                             {showQuestion &&
                                 <Question question={questions[questionKeys[currentQuestionIndex]]} showCards={showCards}
                                           showVideo={showVideo} handleClickButton={handleClickButton}
-                                          interviewId={interviewerId} answer={analysis}/>
+                                          interviewId={interviewerId} answer={analysis}
+                                          handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}/>
 
 
                             }

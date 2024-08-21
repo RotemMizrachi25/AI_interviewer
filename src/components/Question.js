@@ -9,10 +9,9 @@ import Box from '@mui/material/Box';
 import {useTranslation} from "react-i18next";
 import Analysis from "./Analysis";
 
-const Question = ({question, showCards, showVideo, handleClickButton, interviewId, answer}) => {
+const Question = ({question, showCards, showVideo, handleClickButton, interviewId, answer, handleNextQuestion, currentQuestionIndex}) => {
     let open_mouth_image, closed_mouth_img;
     const { t } = useTranslation();
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const audioRef = useRef(null);
     const [isSpeaking, setIsSpeaking] = useState(false);
     const audioUrl = `http://localhost:5000/media/output${currentQuestionIndex+1}.mp3`;
@@ -41,7 +40,7 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
                 console.error("Error playing audio:", error);
             });
         }
-    }, []);
+    }, [audioUrl]);
 
 
     useEffect(() => {
@@ -96,11 +95,11 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
                     <RoundButton onClick={handleClickButton}> Ready to Answer</RoundButton>
                 ))}
 
-            {!answer.isEmpty && <Analysis answer={answer}/>}
+            {!answer.isEmpty && <Analysis answer={answer} handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}/>}
 
 
             <div>
-                <audio ref={audioRef} controls src={audioUrl}/>
+                <audio ref={audioRef} src={audioUrl}/>
             </div>
 
             <Button
@@ -113,6 +112,6 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
                 }}
             >{t('skip_button')}<BsSkipEndFill/></Button>
         </Box>
-    )}
+    )};
 
 export default Question;

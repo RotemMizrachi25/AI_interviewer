@@ -4,10 +4,21 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import * as React from "react";
+import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 
-const Analysis = ({answer}) => {
+const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
     const { t } = useTranslation();
+    const [currentAnswer, setCurrentAnswer] = useState(answer);
+    const handleNext = () => {
+        setCurrentAnswer({}); // Clear the current answer
+        handleNextQuestion();  // Trigger the next question
+    };
+
+    useEffect(() => {
+        setCurrentAnswer(answer);
+    }, [answer]);
+
     return(
         <>
             <Typography variant="h4" align="center" gutterBottom color="darkblue" fontWeight={900}>
@@ -24,10 +35,10 @@ const Analysis = ({answer}) => {
                                 </Typography>
                                 <Typography variant="body1" color="text.secondary">
                                     <li>
-                                        {answer["disadvantage1"]}
+                                        {currentAnswer["disadvantage1"]}
                                     </li>
                                     <li>
-                                        {answer["disadvantage2"]}
+                                        {currentAnswer["disadvantage2"]}
                                     </li>
                                 </Typography>
                             </CardContent>
@@ -43,10 +54,10 @@ const Analysis = ({answer}) => {
                                 </Typography>
                                 <Typography variant="body1" color="text.secondary">
                                     <li>
-                                        {answer["advantage1"]}
+                                        {currentAnswer["advantage1"]}
                                     </li>
                                     <li>
-                                        {answer["advantage2"]}
+                                        {currentAnswer["advantage2"]}
                                     </li>
                                 </Typography>
                             </CardContent>
@@ -62,10 +73,10 @@ const Analysis = ({answer}) => {
                                 </Typography>
                                 <Typography variant="body1" color="text.secondary">
                                     <li>
-                                        {answer["suggestion1"]}
+                                        {currentAnswer["suggestion1"]}
                                     </li>
                                     <li>
-                                        {answer["suggestion2"]}
+                                        {currentAnswer["suggestion2"]}
                                     </li>
                                 </Typography>
                             </CardContent>
@@ -81,13 +92,18 @@ const Analysis = ({answer}) => {
                                 </Typography>
                                 <Typography variant="body1" color="text.secondary">
                                     <li>
-                                        {answer["suggestion1"]}
+                                        {currentAnswer["suggestion1"]}
                                     </li>
                                 </Typography>
                             </CardContent>
                         </CardActionArea>
                     </Card>
                 </Grid>
+            </Grid>
+            <Grid container justifyContent="center" mt={4}>
+                <Button variant="contained" color="primary" onClick={handleNext}>
+                    Next Question
+                </Button>
             </Grid>
             </>
     )
