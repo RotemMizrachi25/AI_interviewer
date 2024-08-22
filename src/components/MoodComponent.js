@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./componentCSS/moodComponent.css";
 
 
-const MoodComponent  = ({handleMoodData}) => {
+const MoodComponent  = props => {
   const grid = useRef(undefined);
   const pin_wrap = useRef(undefined);
   const pin = useRef(undefined);
@@ -41,7 +41,7 @@ const MoodComponent  = ({handleMoodData}) => {
       setEmotion(evt.detail.output);
       console.log("mood: ", evt.detail.output, " type: ", typeof evt.detail.output);
       if(counter <= 120){
-          handleMoodData(evt.detail.output.affects98);
+          props.handleMoodData(evt.detail.output.affects98);
           setCounter(counter + 1);
       }
       // onDataReceive(data);
@@ -104,7 +104,7 @@ const MoodComponent  = ({handleMoodData}) => {
     }
 
     function showPin() {
-      pin.current.style.opacity = 0.7;
+      pin.current.style.opacity = 0;
     }
 
     function hidePin() {
@@ -128,4 +128,6 @@ const MoodComponent  = ({handleMoodData}) => {
 };
 
 export default MoodComponent;
+
+
 
