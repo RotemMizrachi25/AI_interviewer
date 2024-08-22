@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./componentCSS/moodComponent.css";
 
 
-const MoodComponent  = props => {
+const MoodComponent  = ({handleMoodData}) => {
   const grid = useRef(undefined);
   const pin_wrap = useRef(undefined);
   const pin = useRef(undefined);
@@ -26,7 +26,7 @@ const MoodComponent  = props => {
 
       crtDisableTimeout.current= to;
     }
-  
+
     function bindEvent(){
       resetTimeout();
       window.addEventListener("CY_FACE_AROUSAL_VALENCE_RESULT", fn);
@@ -34,17 +34,15 @@ const MoodComponent  = props => {
     }
 
 
-    function fn (evt, onDataReceive) {
+
+
+    function fn (evt, handleMoodData) {
       showPin();
       setEmotion(evt.detail.output);
       console.log("mood: ", evt.detail.output, " type: ", typeof evt.detail.output);
-      if (typeof props.onDataRecieve === 'function') {
-        if(counter <= 120){
-          props.onDataRecieve(evt.detail.output.affects98);
+      if(counter <= 120){
+          handleMoodData(evt.detail.output.affects98);
           setCounter(counter + 1);
-        }
-      } else {
-        console.error('onDataReceive is not a function!', onDataReceive);
       }
       // onDataReceive(data);
 
@@ -58,7 +56,7 @@ const MoodComponent  = props => {
       setDim();
     };
 
-  
+
     function setDim (){
       if (!grid.current || grid.current.clientWidth === 0) {
         setTimeout(() => {
@@ -69,27 +67,27 @@ const MoodComponent  = props => {
         pin_wrap.current.style.height = grid.clientHeight + "px";
       }
     }
-  
+
     function setEmotion ({ arousal = 0, valence = 0 }) {
       let { x, y } = calcCoorinate({ valence, arousal });
       x = Math.max(x, 5.15); // check img ratio to avoid ellipse
       y = Math.max(y, 6);
       //console.log(x,y);
-  
+
       setPinPosition(x, y);
     }
-  
+
     function calcCoorinate ({ valence = 0, arousal = 0 }) {
       const img_outer_width = 800;
       const img_inner_width = 598;
       const img_x_offset = 101;
-  
+
       const img_outer_height = 686;
       const img_inner_height = 598;
       const img_y_offset = 45;
-  
+
       const normalized = (z) => (z + 1) / 2;
-  
+
       return {
         x:
           (100 * (img_x_offset + img_inner_width * normalized(valence))) /
@@ -99,43 +97,35 @@ const MoodComponent  = props => {
           img_outer_height,
       };
     }
-  
+
     function setPinPosition(x, y) {
       pin.current.style.left = `${x - 5.15}%`; // check img ratio to avoid ellipse
       pin.current.style.bottom = `${y - 6}%`;
     }
-  
+
     function showPin() {
       pin.current.style.opacity = 0.7;
     }
-  
+
     function hidePin() {
       pin.current.style.opacity = 0;
     }
 
   }, [grid, pin, pin_wrap]);
 
-  
+
+
 
   return (
     <>
-        <p style={{fontSize:"20px"}}>Mood Component:</p>
-        <div style={{position:"relative", height:"550px", width:"600px"}}>
             <div className="wrapper" id="grid">
-                {(gridN === 38) && <img alt="" src="baseGraph.png" style={{width: "100%", height: "100%"}} />}
-                {(gridN === 98) && <img alt="" src="advancedGraph.png" style={{width: "100%", height: "100%"}} />}
                 <div  className="pin_wrap">
                     <div className="pin"></div>
                 </div>
             </div>
-        </div>
-
-        <div>
-            <button onClick={()=>{setGridN(38)}} disabled={gridN === 38}>38 Affects</button>
-            <button onClick={()=>{setGridN(98)}} disabled={gridN === 98}>98 Affects</button>
-        </div>
     </>
   );
 };
 
 export default MoodComponent;
+
