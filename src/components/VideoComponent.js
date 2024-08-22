@@ -1,4 +1,3 @@
-import FaceTrackerComponent from "./FaceTrackerComponent";
 import React, {useEffect, useRef, useState} from "react";
 import {getAiSdkControls} from "../helpers/ai-sdk/loader";
 import {useExternalScript} from "../helpers/ai-sdk/externalScriptsLoader";
@@ -53,8 +52,8 @@ const VideoComponent = ({showVideo, aiSdkState, mphToolsState, onTimerEnd}) => {
         <div style={{width:"640px", height: "480px", position:"relative"}}>
             <Timer onTimerEnd={onTimerEnd}/>
             <video id="videoEl"></video>
-            <FaceTrackerComponent videoEl={videoEl}></FaceTrackerComponent>
         </div>
     );
 }
 export default VideoComponent;
+

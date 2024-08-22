@@ -4,12 +4,7 @@ import { getAiSdkControls } from "../helpers/ai-sdk/loader";
 import { BsSkipEndFill } from "react-icons/bs";
 import '../App.css';
 import '../index.css';
-import GenderComponent from "../components/GenderComponent";
-import AgeComponent from "../components/AgeComponent";
-import DominantEmotionComponent from "../components/DominantEmotionComponent";
-import FeatureComponent from "../components/FeatureComponent";
 import EngagementComponent from "../components/EngagementComponent";
-import FaceTrackerComponent from "../components/FaceTrackerComponent";
 import MoodComponent from "../components/MoodComponent";
 import EmotionBarsComponent from "../components/EmotionBarsComponent";
 import VideoComponent from "../components/VideoComponent";
@@ -121,40 +116,41 @@ function Simulation() {
         console.log(response_json.results)
     };
 
-    // const handleMoodData = (newAffects) => {
-    //     setAffects(affects => [...affects, newAffects]);
-    // };
+    const handleMoodData = (newAffects) => {
+        setAffects(affects => [...affects, newAffects]);
+        console.log(affects);
+    };
 
-    // const handleArousalValencData = (newArousal, newValence) => {
-    //     setArousal(arousal => [...arousal, newArousal]);
-    //     setValence(valence => [...valence, newValence]);
-    // }
-    // const handleAttentionData = (newAttention) => {
-    //     setAttention(attention => [...attention, newAttention]);
-    // }
+    const handleArousalValencData = (newArousal, newValence) => {
+        setArousal(arousal => [...arousal, newArousal]);
+        setValence(valence => [...valence, newValence]);
+    }
+    const handleAttentionData = (newAttention) => {
+        setAttention(attention => [...attention, newAttention]);
+    }
 
 
-    //
-    // useEffect(() => {
-    //     console.log("MoodData from comp: ", affects);
-    //     if(affects.length === 120){
-    //         console.log("Type MoodData:", typeof moodData);
-    //         moodApiCaller();
-    //     }
-    // }, [affects]);
 
-    // useEffect(() => {
-    //     console.log("EngageData from comp: ", arousal, valence, attention);
-    //     if(arousal.length === 120){
-    //         engageApiCaller("arousal", arousal);
-    //     }
-    //     if(valence.length === 120){
-    //         engageApiCaller("valence", valence);
-    //     }
-    //     if(attention.length === 400){
-    //         engageApiCaller("attention", attention);
-    //     }
-    // }, [arousal, valence, attention]);
+    useEffect(() => {
+        console.log("MoodData from comp: ", affects);
+        if(affects.length === 120){
+            console.log("Type MoodData:", typeof moodData);
+            moodApiCaller();
+        }
+    }, [affects]);
+
+    useEffect(() => {
+        console.log("EngageData from comp: ", arousal, valence, attention);
+        if(arousal.length === 120){
+            engageApiCaller("arousal", arousal);
+        }
+        if(valence.length === 120){
+            engageApiCaller("valence", valence);
+        }
+        if(attention.length === 400){
+            engageApiCaller("attention", attention);
+        }
+    }, [arousal, valence, attention]);
 
 
 
@@ -313,20 +309,12 @@ function Simulation() {
                                                                                       mphToolsState={mphToolsState}
                                                                                       onTimerEnd={stopVideo}/>
                 }
-                {/*<GenderComponent></GenderComponent>*/}
-                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                {/*{showVideo && <DominantEmotionComponent></DominantEmotionComponent>}*/}
-                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                {/*<AgeComponent></AgeComponent>*/}
-                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                {/*{showVideo && <FeatureComponent></FeatureComponent>}*/}
-                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                {/*{showVideo && <EngagementComponent onDataAttention={handleAttentionData} onDataArousalValence={handleArousalValencData}/>}*/}
-                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                {/*{showVideo && <MoodComponent onDataRecieve={handleMoodData}/>}*/}
-                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
-                {/*{showVideo && <EmotionBarsComponent></EmotionBarsComponent>}*/}
-                {/*<hr className="solid" style={{width:"100%"}}></hr>*/}
+                {showVideo && <EngagementComponent onDataAttention={handleAttentionData} onDataArousalValence={handleArousalValencData}/>}
+                <hr className="solid" style={{width:"100%"}}></hr>
+                {showVideo && <MoodComponent handleMoodData={handleMoodData}/>}
+                <hr className="solid" style={{width:"100%"}}></hr>
+                {showVideo && <EmotionBarsComponent></EmotionBarsComponent>}
+                <hr className="solid" style={{width:"100%"}}></hr>
             </div>
         </div>
 );

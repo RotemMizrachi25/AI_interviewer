@@ -72,6 +72,7 @@ def record(language,result_container):
     # Path to your audio file (must be in WAV format with LINEAR16 encoding)
     transcription_result =  transcribe_audio(output_path, language)
     result_container.append(transcription_result)
+    should_stop = False
 
 # def start_recording(language):
 #     global should_stop

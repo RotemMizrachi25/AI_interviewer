@@ -70,65 +70,65 @@ const EngagementComponent = props => {
   }, []);
 
 
-  return (
-    <>
-    <p style={{fontSize:"20px"}}>Engagement Component:</p>
-    <div
-id="rangesContainer"
->
-<div className="rangeContainer">
-  <div>
-    <div>
-      <input
-      type="range"
-      min="1"
-      max="100"
-      value={arousal || 0}
-      onChange={()=>{}}
-      className="slider"
-      color="#E29219"
-    />
-    </div>
-    <span id="title">Arousal</span>
-  </div>
-</div>
-<div className="rangeContainer">
-  <div>
-    <div>
-      <input
-      type="range"
-      min="1"
-      max="100"
-      value={valence || 0}
-      onChange={()=>{}}
-      className="slider"
-      color="#19E282"
-    />
-    </div>
-    <span id="title">Valence</span>
-  </div>
-</div>
-<div className="rangeContainer">
-  <div>
-    <div>
-      <input
-      type="range"
-      min="1"
-      max="100"
-      value={attention || 0}
-      onChange={()=>{}}
-      className="slider"
-      color="#FFFFFF"
-    />
-    </div>
-    <span id="title">Attention</span>
-  </div>
-</div>
-</div>
-
-    </>
-    
-  );
+//   return (
+//     <>
+//     <p style={{fontSize:"20px"}}>Engagement Component:</p>
+//     <div
+// id="rangesContainer"
+// >
+// <div className="rangeContainer">
+//   <div>
+//     <div>
+//       <input
+//       type="range"
+//       min="1"
+//       max="100"
+//       value={arousal || 0}
+//       onChange={()=>{}}
+//       className="slider"
+//       color="#E29219"
+//     />
+//     </div>
+//     <span id="title">Arousal</span>
+//   </div>
+// </div>
+// <div className="rangeContainer">
+//   <div>
+//     <div>
+//       <input
+//       type="range"
+//       min="1"
+//       max="100"
+//       value={valence || 0}
+//       onChange={()=>{}}
+//       className="slider"
+//       color="#19E282"
+//     />
+//     </div>
+//     <span id="title">Valence</span>
+//   </div>
+// </div>
+// <div className="rangeContainer">
+//   <div>
+//     <div>
+//       <input
+//       type="range"
+//       min="1"
+//       max="100"
+//       value={attention || 0}
+//       onChange={()=>{}}
+//       className="slider"
+//       color="#FFFFFF"
+//     />
+//     </div>
+//     <span id="title">Attention</span>
+//   </div>
+// </div>
+// </div>
+//
+//     </>
+//
+//   );
 };
 
 export default EngagementComponent;

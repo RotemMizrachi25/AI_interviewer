@@ -95,13 +95,13 @@ def valence():
         return jsonify({'error': 'No data received'}), 400
 
     print("Received data:", data)  # Log the received data
-    print(type(data), type(data['affects'][0]))
-
-    for key, val in data['affects'][0].items():
-        if val > 0.5:
-            dominante.append(key)
-
-    print("dominate feelings are: " + ", ".join(dominante))
+    # print(type(data), type(data['affects'][0]))
+    #
+    # for key, val in data['affects'][0].items():
+    #     if val > 0.5:
+    #         dominante.append(key)
+    #
+    # print("dominate feelings are: " + ", ".join(dominante))
 
     # Example: return received data or some processed result
     return jsonify({'message': 'Data processed', 'yourData': data}), 200
@@ -117,12 +117,16 @@ def recorder():
     # call function to analyze the content 
     # answer = speechTotext.record(data["language"])
     answer = []
-    thread = threading.Thread(target=speechTotext.record, args=(data["language"],answer))
-    thread.start()
-    thread.join()
+    # thread = threading.Thread(target=speechTotext.record, args=(data["language"],answer))
+    # thread.start()
+    # thread.join()
     print(answer)
-    analysis = content_analyzer(data["field"], data["question"], answer[0])
-    print(analysis)
+    # if answer is not []:
+    #     analysis = content_analyzer(data["field"], data["question"], answer[0])
+    # else:
+    #     analysis = content_analyzer(data["field"], data["question"], "")
+    # print(analysis)
+    analysis = {"disadvantage1":"","disadvantage2":"","advantage1":"","advantage2":"","suggestion1":"","suggestion2":"","revised answer":""}
     return analysis
 
     # Example: return received data or some processed result
@@ -135,16 +139,16 @@ def stop_recording():
 
     return jsonify({'status': 'Recording stopping'}), 200
 
-@app.route('/arousel', methods=['POST'])
-def arousel():
+@app.route('/arousal', methods=['POST'])
+def arousal():
     data = request.get_json()  # This will get the JSON data sent with the POST
     if not data:
         return jsonify({'error': 'No data received'}), 400
-
-    count = sum(1 for value in data['arousel'] if value > 0.5)
+    print(data)
+    count = sum(1 for value in data['arousal'] if value > 0.5)
     total = len(data)
     percentage = (count / total) * 100
-    print("you had your arousel on the interview " + percentage + "precent of the time")
+    print("you had your arousal on the interview " + str(percentage) + "precent of the time")
     # Example: return received data or some processed result
     return jsonify({'message': 'Data processed', 'yourData': data}), 200
 
@@ -160,7 +164,7 @@ def attention():
     count = sum(1 for value in data['attention'] if value > 0.5)
     total = len(data)
     percentage = (count / total) * 100
-    print("you had your attention to the interview " + percentage + "precent of the time")
+    print("you had your attention to the interview " + str(percentage) + "precent of the time")
 
     # Example: return received data or some processed result
     return jsonify({'message': 'Data processed', 'yourData': data}), 200
