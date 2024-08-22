@@ -19,6 +19,7 @@ import Typography from "@mui/material/Typography";
 import Question from "../components/Question";
 import SpeakingCharacter from "../components/SpeakingCharacter";
 import { ClipLoader } from 'react-spinners';
+import {useLanguage} from "../components/LanguageContext";
 
 function Simulation() {
 
@@ -42,6 +43,7 @@ function Simulation() {
     const [isLoading, setIsLoading] = useState(false);
     const [questions, setQuestions] = useState({});
     const [questionKeys,setQuestionkeys] = useState([]);
+    const { language } = useLanguage();
     const audioSources = [
         "/output1.mp3", // for index 0
         "/output2.mp3", // for index 1
@@ -64,12 +66,13 @@ function Simulation() {
     };
 
     const recordApiCall = async () => {
+        alert(language);
         const response = await fetch(`http://localhost:5000/record`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({language: "he-IL", question: questions[questionKeys[currentQuestionIndex]], field:selectedField})
+            body: JSON.stringify({language: language, question: questions[questionKeys[currentQuestionIndex]], field:selectedField})
         });
         //console.log(response);
         const response_json = await response.json();

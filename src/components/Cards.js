@@ -36,7 +36,7 @@ export default function InterviewerCards({ func }) {
             </Typography>
             <Grid container spacing={2} justifyContent="center" alignItems="center" margin="20px">
                 <Grid item xs={12} sm={3}>
-                    <Card sx={{ maxWidth: 345 }}>
+                    <Card sx={{ maxWidth: 345, minHeight: 400, display: 'flex', flexDirection: 'column' }}>
                         <CardActionArea>
                             <CardMedia
                                 component="img"
@@ -50,7 +50,7 @@ export default function InterviewerCards({ func }) {
                                     height: { xs: 'auto', sm: 140 },
                                 }}
                             />
-                            <CardContent>
+                            <CardContent sx={{ minHeight: 140 }}>
                                 <Typography gutterBottom variant="h5" component="div">
                                     Chris
                                 </Typography>
@@ -65,7 +65,7 @@ export default function InterviewerCards({ func }) {
                     </Card>
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                    <Card sx={{ maxWidth: 345 }}>
+                    <Card sx={{ maxWidth: 345, minHeight: 400, display: 'flex', flexDirection: 'column' }}>
                         <CardActionArea>
                             <CardMedia
                                 component="img"
@@ -79,7 +79,7 @@ export default function InterviewerCards({ func }) {
                                     height: { xs: 'auto', sm: 140 },
                                 }}
                             />
-                            <CardContent>
+                            <CardContent sx={{ minHeight: 140 }}>
                                 <Typography gutterBottom variant="h5" component="div">
                                     Nelly
                                 </Typography>
@@ -94,7 +94,7 @@ export default function InterviewerCards({ func }) {
                     </Card>
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                    <Card sx={{ maxWidth: 345 }}>
+                    <Card sx={{ maxWidth: 345, minHeight: 400, display: 'flex', flexDirection: 'column' }}>
                         <CardActionArea>
                             <CardMedia
                                 component="img"
@@ -108,7 +108,7 @@ export default function InterviewerCards({ func }) {
                                     height: { xs: 'auto', sm: 140 },
                                 }}
                             />
-                            <CardContent>
+                            <CardContent sx={{ minHeight: 140 }}>
                                 <Typography gutterBottom variant="h5" component="div">
                                     Sheldon
                                 </Typography>
@@ -123,7 +123,7 @@ export default function InterviewerCards({ func }) {
                     </Card>
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                    <Card sx={{ maxWidth: 345 }}>
+                    <Card sx={{ maxWidth: 345, minHeight: 400, display: 'flex', flexDirection: 'column' }}>
                         <CardActionArea>
                             <CardMedia
                                 component="img"
@@ -137,7 +137,7 @@ export default function InterviewerCards({ func }) {
                                     height: { xs: 'auto', sm: 140 },
                                 }}
                             />
-                            <CardContent>
+                            <CardContent sx={{ minHeight: 140 }}>
                                 <Typography gutterBottom variant="h5" component="div">
                                     Lisa
                                 </Typography>
@@ -145,7 +145,7 @@ export default function InterviewerCards({ func }) {
                                     Lisa is a friendly interviewer who creates a supportive environment, encouraging candidates to feel comfortable while sharing their experiences and qualifications.
                                 </Typography>
                             </CardContent>
-                            <CardActions>
+                            <CardActions sx={{ mt: 'auto' }}>
                                 <Button size="small" onClick={() => handleStartSimulation(3)}>{t("start_simulation_card")}</Button>
                             </CardActions>
                         </CardActionArea>
