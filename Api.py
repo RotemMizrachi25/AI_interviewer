@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from flask import Flask, request, jsonify,send_from_directory
 from flask_cors import CORS
 from JobInterviewAI import generate_questions,content_analyzer
+import threading
 
 app = Flask(__name__)
 CORS(app)
@@ -114,15 +115,25 @@ def recorder():
 
     print("Received data:", data)  # Log the received data
     # call function to analyze the content 
-    answer = speechTotext.record(data["language"])
+    # answer = speechTotext.record(data["language"])
+    answer = []
+    thread = threading.Thread(target=speechTotext.record, args=(data["language"],answer))
+    thread.start()
+    thread.join()
     print(answer)
-    analysis = content_analyzer(data["field"], data["question"], answer)
+    analysis = content_analyzer(data["field"], data["question"], answer[0])
     print(analysis)
     return analysis
 
     # Example: return received data or some processed result
     return jsonify({'message': 'Data processed', 'yourData': data}), 200
 
+@app.route('/stop-recording', methods=['POST'])
+def stop_recording():
+    global should_stop
+    speechTotext.stop_recording()
+
+    return jsonify({'status': 'Recording stopping'}), 200
 
 @app.route('/arousel', methods=['POST'])
 def arousel():

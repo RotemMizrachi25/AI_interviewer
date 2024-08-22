@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import {useTranslation} from "react-i18next";
 import Analysis from "./Analysis";
 
-const Question = ({question, showCards, showVideo, handleClickButton, interviewId, answer, handleNextQuestion, currentQuestionIndex}) => {
+const Question = ({question, showCards, showVideo, handleClickButton, handleSubmit, interviewId, answer, handleNextQuestion, currentQuestionIndex}) => {
     let open_mouth_image, closed_mouth_img;
     const { t } = useTranslation();
     const audioRef = useRef(null);
@@ -90,7 +90,7 @@ const Question = ({question, showCards, showVideo, handleClickButton, interviewI
                 isSpeaking={isSpeaking}/>
             {!showCards && (
                 showVideo ? (
-                    <RoundButton onClick={handleClickButton}> Submit Answer</RoundButton>
+                    <RoundButton onClick={handleSubmit}> Submit Answer</RoundButton>
                 ) : (
                     <RoundButton onClick={handleClickButton}> Ready to Answer</RoundButton>
                 ))}

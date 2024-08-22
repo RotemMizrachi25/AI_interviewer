@@ -23,10 +23,12 @@ OUTPUT_FILENAME = "output.wav"  # Output file name
 output_path = os.path.join(os.getcwd(), OUTPUT_FILENAME)
 # Initialize PyAudio
 audio = pyaudio.PyAudio()
+should_stop = False
 
 
-def record(language):
+def record(language,result_container):
     # Open the audio stream
+    global should_stop
     stream = audio.open(format=FORMAT,
                         channels=CHANNELS,
                         rate=RATE,
@@ -41,11 +43,12 @@ def record(language):
 
     # Record audio in chunks
     for _ in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-        if flag is True:
-            data = stream.read(CHUNK)
-            frames.append(data)
-            end_time = time.time()
-            elapsed_time = end_time - start_time
+        if should_stop:
+            print("stop recording")
+            break
+
+        data = stream.read(CHUNK)
+        frames.append(data)
         # if elapsed_time > 8:    # later we will implement the flag using a flag from frontend
             #   flag = False
 
@@ -67,8 +70,17 @@ def record(language):
     print(f"Audio saved to {output_path}")
     
     # Path to your audio file (must be in WAV format with LINEAR16 encoding)
-    return transcribe_audio(output_path, language)
+    transcription_result =  transcribe_audio(output_path, language)
+    result_container.append(transcription_result)
 
+# def start_recording(language):
+#     global should_stop
+#     should_stop = False
+#     record(language)
+
+def stop_recording():
+    global should_stop
+    should_stop = True
 
 def transcribe_audio(audio_file_path, language):
     # Initialize the client

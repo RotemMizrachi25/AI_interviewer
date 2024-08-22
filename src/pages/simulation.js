@@ -74,7 +74,7 @@ function Simulation() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({language: "he-IL", question: "what is your career goal?", field:"computer science"})
+            body: JSON.stringify({language: "he-IL", question: questions[questionKeys[currentQuestionIndex]], field:selectedField})
         });
         //console.log(response);
         const response_json = await response.json();
@@ -166,6 +166,22 @@ function Simulation() {
         //     alert("in handle clickkkkkk");
         //     recordApiCall();
         // }
+    }
+
+    const handleSubmit = () => {
+        setVideo(!showVideo);
+        fetch('http://localhost:5000/stop-recording', {
+        method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Recording stopped:", data);
+            // Handle the response from stopping the recording, if necessary
+        })
+        .catch(error => {
+            console.error("Error stopping recording:", error);
+        });
+
     }
 
     // Function to stop the video after timer is zero
@@ -276,7 +292,7 @@ function Simulation() {
 
                             {showQuestion &&
                                 <Question question={questions[questionKeys[currentQuestionIndex]]} showCards={showCards}
-                                          showVideo={showVideo} handleClickButton={handleClickButton}
+                                          showVideo={showVideo} handleClickButton={handleClickButton} handleSubmit={handleSubmit}
                                           interviewId={interviewerId} answer={analysis}
                                           handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}/>
 
