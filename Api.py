@@ -16,23 +16,74 @@ FILE_DIRECTORY = os.getcwd()
 @app.route('/weighted_emotions', methods=['POST'])
 def weighted_emotions():
     weights = {
-        'happiness': 1.0,
-        'sadness': 0.8,
-        'fear': 0.6,
-        'disgust': 0.4,
-        'anger': 0.7,
-        'surprise': 0.5
+        'Afraid': 0.7,
+        'Amused': 0.9,
+        'Angry': 0.8,
+        'Annoyed': 0.6,
+        'Uncomfortable': 0.5,
+        'Anxious': 0.8,
+        'Apathetic': 0.6,
+        'Astonished': 0.8,
+        'Bored': 0.4,
+        'Worried': 0.7,
+        'Calm': 0.9,
+        'Conceited': 0.5,
+        'Contemplative': 0.5,
+        'Content': 0.8,
+        'Convinced': 0.7,
+        'Delighted': 1.0,
+        'Depressed': 0.7,
+        'Determined': 0.8,
+        'Disappointed': 0.7,
+        'Discontented': 0.5,
+        'Distressed': 0.7,
+        'Embarrassed': 0.6,
+        'Enraged': 0.7,
+        'Excited': 1.0,
+        'Feel Well': 0.9,
+        'Frustrated': 0.7,
+        'Happy': 1.0,
+        'Hopeful': 0.9,
+        'Impressed': 0.8,
+        'Melancholic': 0.6,
+        'Peaceful': 0.9,
+        'Pensive': 0.6,
+        'Pleased': 0.8,
+        'Relaxed': 0.9,
+        'Sad': 0.7,
+        'Satisfied': 0.8,
+        'Sleepy': 0.4,
+        'Tired': 0.5
     }
+
     weighted_score = 0
     data = request.get_json()
     if not data:
         return jsonify({'error': 'No data received'}), 400
-
+    
     for key, val in data['affects'][0].items():
         if key in weights:
             weighted_score += val * weights[key]
+    
+    # Thresholds
+    max_possible_score = sum(weights.values())  # 31.4 based on the provided weights
+    high_threshold = 0.8 * max_possible_score  # 80% of maximum score
+    medium_threshold = 0.6 * max_possible_score  # 60% of maximum score
 
-    return jsonify({'weighted_score': weighted_score, 'yourData': data}), 200
+    # Determine the outcome based on the weighted score
+    if weighted_score > high_threshold:
+        outcome = "High likelihood of passing the interview"
+    elif medium_threshold <= weighted_score <= high_threshold:
+        outcome = "Moderate/neutral outcome; further evaluation needed"
+    else:
+        outcome = "Low likelihood of passing the interview"
+    
+    print(f"Weighted Score: {weighted_score}")
+    print(f"Outcome: {outcome}")
+    
+    return jsonify({'weighted_score': weighted_score, 'outcome': outcome, 'yourData': data}), 200
+
+
 
 
 @app.route('/recommendations', methods=['POST'])
@@ -42,16 +93,125 @@ def recommendations():
     if not data:
         return jsonify({'error': 'No data received'}), 400
 
-    dominant_emotions = [key for key, val in data['affects'][0].items() if val > 0.5]
+    # Identify dominant emotions (those with values greater than 0.5)
+    dominant_emotions = {key: val for key, val in data['affects'][0].items() if val > 0.5}
 
-    if 'fear' in dominant_emotions or 'anxiety' in dominant_emotions:
-        recommendations.append('Take a deep breath and try to relax.')
-    if 'happiness' in dominant_emotions:
-        recommendations.append('Keep up the positive attitude!')
-    if 'sadness' in dominant_emotions:
-        recommendations.append('Try to focus on positive thoughts.')
+    # Provide recommendations based on dominant emotions
+    if 'Afraid' in dominant_emotions or 'Anxious' in dominant_emotions:
+        recommendations.append('Take a deep breath, maintain eye contact, and try to stay calm.')
+
+    if 'Amused' in dominant_emotions:
+        recommendations.append('Your lightheartedness is good, but ensure it aligns with the interview’s tone.')
+
+    if 'Angry' or 'Annoyed' in dominant_emotions:
+        recommendations.append('Try to manage your frustration, as it can negatively impact your responses.')
+
+    if 'Uncomfortable' in dominant_emotions:
+        recommendations.append('Try to focus on your strengths and be more confident in your abilities.')
+
+    if 'Apathetic' in dominant_emotions:
+        recommendations.append('Show more enthusiasm for the role to convey genuine interest.')
+
+    if 'Astonished' in dominant_emotions:
+        recommendations.append('If something surprises you, stay composed and provide thoughtful responses.')
+
+    if 'Bored' in dominant_emotions:
+        recommendations.append('Engage more actively in the conversation to show interest.')
+
+    if 'Worried' in dominant_emotions:
+        recommendations.append('Prepare thoroughly to boost your confidence and ease your concerns.')
+
+    if 'Calm' in dominant_emotions:
+        recommendations.append('Your calm demeanor is a strong asset. Keep it up.')
+
+    if 'Conceited' in dominant_emotions:
+        recommendations.append('Balance confidence with humility to avoid coming across as arrogant.')
+
+    if 'Contemplative' in dominant_emotions:
+        recommendations.append('Reflective thinking is good, but ensure you respond in a timely manner.')
+
+    if 'Content' in dominant_emotions:
+        recommendations.append('Maintain this positive mindset, it reflects well on you.')
+
+    if 'Convinced' in dominant_emotions:
+        recommendations.append('Confidence in your answers is good, but remain open to feedback.')
+
+    if 'Delighted' in dominant_emotions:
+        recommendations.append('Your enthusiasm is infectious! Keep it up.')
+
+    if 'Depressed' in dominant_emotions:
+        recommendations.append('Focus on your strengths and what excites you about the role.')
+
+    if 'Determined' in dominant_emotions:
+        recommendations.append('Your determination is impressive, channel it into clear, concise answers.')
+
+    if 'Disappointed' in dominant_emotions:
+        recommendations.append('Try to stay positive and focus on what you can control in the interview.')
+
+    if 'Discontented' in dominant_emotions:
+        recommendations.append('Highlight aspects of the role that you find appealing.')
+
+    if 'Distressed' in dominant_emotions:
+        recommendations.append('Take a moment to collect yourself, and focus on your core competencies.')
+
+    if 'Embarrassed' in dominant_emotions:
+        recommendations.append('Everyone makes mistakes; recover quickly and move on.')
+
+    if 'Enraged' in dominant_emotions:
+        recommendations.append('Try to remain composed and redirect your energy into positive communication.')
+
+    if 'Excited' in dominant_emotions:
+        recommendations.append('Your excitement is great! Just ensure it doesn’t overwhelm your focus.')
+
+    if 'Feel Well' in dominant_emotions:
+        recommendations.append('You’re in a good place emotionally. Keep your confidence high.')
+
+    if 'Frustrated' in dominant_emotions:
+        recommendations.append('Try to channel your frustration into constructive feedback.')
+
+    if 'Happy' in dominant_emotions:
+        recommendations.append('Your positive energy is a great asset. Keep it up!')
+
+    if 'Hopeful' in dominant_emotions:
+        recommendations.append('Hopefulness is a great mindset. Use it to inspire confidence in your answers.')
+
+    if 'Impressed' in dominant_emotions:
+        recommendations.append('If something impresses you, acknowledge it, but stay focused on your goals.')
+
+    if 'Melancholic' in dominant_emotions:
+        recommendations.append('Try to shift your focus to positive outcomes and experiences.')
+
+    if 'Peaceful' in dominant_emotions:
+        recommendations.append('Your peaceful demeanor is beneficial, maintain your composure.')
+
+    if 'Pensive' in dominant_emotions:
+        recommendations.append('Thoughtfulness is good, but be sure to articulate your thoughts clearly.')
+
+    if 'Pleased' in dominant_emotions:
+        recommendations.append('Your satisfaction shows. Keep your energy positive and engaging.')
+
+    if 'Relaxed' in dominant_emotions:
+        recommendations.append('Your relaxation is a strength, just stay engaged and alert.')
+
+    if 'Sad' in dominant_emotions:
+        recommendations.append('Focus on what excites you about the role and what you can contribute.')
+
+    if 'Satisfied' in dominant_emotions:
+        recommendations.append('Your contentment is positive. Keep your energy steady and strong.')
+
+    if 'Sleepy' in dominant_emotions:
+        recommendations.append('Try to boost your energy before the interview; a quick walk might help.')
+
+    if 'Tired' in dominant_emotions:
+        recommendations.append('Stay hydrated and focused; push through the fatigue with enthusiasm.')
+
+    # If no specific dominant emotions, provide general advice
+    if not recommendations:
+        recommendations.append('Stay positive and confident. Preparation is key to success.')
 
     return jsonify({'recommendations': recommendations, 'yourData': data}), 200
+
+
 
 
 @app.route('/submit', methods=['POST'])
@@ -87,24 +247,35 @@ def dominante_moods():
     return jsonify({'message': 'Data processed', 'yourData': data}), 200
 
 
+
 @app.route('/valence', methods=['POST'])
 def valence():
-    dominante = []
-    data = request.get_json()  # This will get the JSON data sent with the POST
-    if not data:
-        return jsonify({'error': 'No data received'}), 400
+    data = request.get_json()  # Get the JSON data sent with the POST request
+    if not data or 'valence' not in data:
+        return jsonify({'error': 'No valence data received'}), 400
 
-    print("Received data:", data)  # Log the received data
-    # print(type(data), type(data['affects'][0]))
-    #
-    # for key, val in data['affects'][0].items():
-    #     if val > 0.5:
-    #         dominante.append(key)
-    #
-    # print("dominate feelings are: " + ", ".join(dominante))
+    valence_values = data['valence']
 
-    # Example: return received data or some processed result
-    return jsonify({'message': 'Data processed', 'yourData': data}), 200
+    if not isinstance(valence_values, list) or len(valence_values) == 0:
+        return jsonify({'error': 'Valence data is not a valid non-empty list'}), 400
+
+    # Calculate the average valence
+    average_valence = sum(valence_values) / len(valence_values)
+
+    # Determine the level of pleasantness based on the average valence
+    if average_valence > 0.25:
+        pleasantness_level = "pleasant"
+    elif average_valence < (-0.25):
+        pleasantness_level = "unpleasant"
+    else:
+        pleasantness_level = "neutral"
+
+    # Return the processed results
+    return jsonify({
+        'message': 'Valence processed',
+        'average_valence': average_valence,
+        'pleasantness_level': pleasantness_level
+    }), 200
 
 
 @app.route('/record', methods=['POST'])
@@ -142,15 +313,42 @@ def stop_recording():
 @app.route('/arousal', methods=['POST'])
 def arousal():
     data = request.get_json()  # This will get the JSON data sent with the POST
-    if not data:
-        return jsonify({'error': 'No data received'}), 400
-    print(data)
-    count = sum(1 for value in data['arousal'] if value > 0.5)
-    total = len(data)
-    percentage = (count / total) * 100
-    print("you had your arousal on the interview " + str(percentage) + "precent of the time")
-    # Example: return received data or some processed result
-    return jsonify({'message': 'Data processed', 'yourData': data}), 200
+    if not data or 'arousal' not in data:
+        return jsonify({'error': 'No arousal data received'}), 400
+
+    arousal_values = data['arousal']
+    total = len(arousal_values)
+
+    if total == 0:
+        return jsonify({'error': 'No arousal values provided'}), 400
+
+    positive_count = sum(1 for value in arousal_values if value > 0)
+    negative_count = sum(1 for value in arousal_values if value < 0)
+
+    positive_percentage = (positive_count / total) * 100
+    negative_percentage = (negative_count / total) * 100
+
+    # Determine the overall arousal state
+    if positive_percentage > negative_percentage:
+        overall_arousal = "Positive Arousal"
+    elif negative_percentage > positive_percentage:
+        overall_arousal = "Negative Arousal"
+    else:
+        overall_arousal = "Neutral Arousal"
+
+    # Output message
+    print(f"Positive arousal: {positive_percentage}%")
+    print(f"Negative arousal: {negative_percentage}%")
+    print(f"Overall arousal: {overall_arousal}")
+
+    # Return the processed data with arousal state
+    return jsonify({
+        'positive_percentage': positive_percentage,
+        'negative_percentage': negative_percentage,
+        'overall_arousal': overall_arousal,
+        'yourData': data
+    }), 200
+
 
 
 @app.route('/attention', methods=['POST'])
@@ -159,15 +357,30 @@ def attention():
     if not data:
         return jsonify({'error': 'No data received'}), 400
 
-    print("Received data:", data)  # Log the received data
+    #print("Received data:", data)  # Log the received data
 
-    count = sum(1 for value in data['attention'] if value > 0.5)
-    total = len(data)
-    percentage = (count / total) * 100
-    print("you had your attention to the interview " + str(percentage) + "precent of the time")
+    attention_values = data['attention']
+    total = len(attention_values)
 
-    # Example: return received data or some processed result
-    return jsonify({'message': 'Data processed', 'yourData': data}), 200
+    if total == 0:
+        return jsonify({'error': 'No attention values provided'}), 400
+
+    # Count how many attention values are above a threshold (e.g., 0.7)
+    threshold = 0.7
+    focused_count = sum(1 for value in attention_values if value > threshold)
+    
+    # Calculate the percentage of time the candidate was attentive
+    percentage_attention = (focused_count / total) * 100
+
+    # Output message
+    print(f"Attention above {threshold}: {percentage_attention}% of the time")
+
+    # Return the processed data with attention percentage
+    return jsonify({
+        'percentage_attention': percentage_attention,
+        'yourData': data
+    }), 200
+
 
 @app.route('/media/<path:filename>')
 def serve_file(filename):
