@@ -88,6 +88,26 @@ def content_analyzer(field, question, answer):
     return generate_chat_call(user_massage, 0.9)
 
 
+def content_feelings_analyzer(field, question, answer, feelings):
+    user_massage = f"I'm a applying for a new job in {field}. In my interview I got this question:" \
+                   f"{question}. I answered: {answer}." \
+                    f"the dominant feelings I felt during my answer: {feelings}"\
+                   f"give me 2 disadvantages and 2 advantages in my answer. give me 1 suggestion of changes I could " \
+                   f"say to " \
+                   f"improve my answer and 1 suggestion of the feelings I should show during the interview" \
+                   f"and  1 revised answer." \
+                   f" If the disadvantage/advantage/suggestion are minor write none" \
+                   f"Answer in json:" \
+                   f"[disadvantage1]:[the disadvantage/none]" \
+                   f"[disadvantage2]:[the disadvantage/none]" \
+                   f"[advantage1]:[the advantage/none]" \
+                   f"[advantage2]:[the advantage/none]" \
+                   f"[suggestion1]:[the suggestion/none]" \
+                   f"[suggestion2]:[the suggestion of feelings]" \
+                   f"[revised answer]:[the revised answer]"
+    return generate_chat_call(user_massage, 0.9)
+
+
 def question_generator_friendly(field, role):
     user_massage = f"Act as a friendly interviewer. You should interview me for a job in {field}." \
                    f"Ask questions that focus on my passions, motivations, and how they fit into the team culture for {role} " \
@@ -197,8 +217,8 @@ def generate_questions(field, interviewerID, role):
 if __name__ == '__main__':
     #print("strict")
     # Example usage
-    questions = question_generator_behave("Computer science", -1, "full stack")
-    print(questions)
+    # questions = question_generator_behave("Computer science", -1, "full stack")
+    # print(questions)
     # questions_dict = json.loads(questions)
     # questions_iterator = iter(questions_dict.items())
     # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./inspiring-team-386523-29d458586b76.json"
@@ -221,14 +241,15 @@ if __name__ == '__main__':
     #           "easier to share the workload and get answers from others. Working alone can be stressful, and I might " \
     #           "get stuck without anyone to help me immediately. So, I guess I'm not that comfortable working " \
     #           "independently. "
-    # answerb = "Yes, I am comfortable working independently. During my time in the army, I often had to tackle complex " \
-    #          "technical challenges on my own, which required me to take initiative and develop problem-solving " \
-    #          "skills. Additionally, my experience as a computer science student has involved a significant amount of " \
-    #          "" \
-    #          "self-directed learning and project work. For instance, in my recent coursework, I completed several " \
-    #          "coding projects where I had to research, design, and implement solutions independently. " \
-    #          "However, I also understand the importance of collaboration and communication in a team setting. I value " \
-    #          "the insights and feedback that come from working with others, and I am always willing to seek help and " \
-    #          "contribute to group efforts when needed. I believe that a balance of independent work and teamwork is " \
-    #          "crucial for success in a software development role. "
-    # print(content_analyzer("computer science", "Are you comfortable working independently?", answer))
+    answerb = "Yes, I am comfortable working independently. During my time in the army, I often had to tackle complex " \
+             "technical challenges on my own, which required me to take initiative and develop problem-solving " \
+             "skills. Additionally, my experience as a computer science student has involved a significant amount of " \
+             "" \
+             "self-directed learning and project work. For instance, in my recent coursework, I completed several " \
+             "coding projects where I had to research, design, and implement solutions independently. " \
+             "However, I also understand the importance of collaboration and communication in a team setting. I value " \
+             "the insights and feedback that come from working with others, and I am always willing to seek help and " \
+             "contribute to group efforts when needed. I believe that a balance of independent work and teamwork is " \
+             "crucial for success in a software development role. "
+    feelings = ['happy', 'confident', 'hesitant']
+    print(content_feelings_analyzer("computer science", "Are you comfortable working independently?", answerb, feelings))

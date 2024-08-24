@@ -20,6 +20,7 @@ import Question from "../components/Question";
 import SpeakingCharacter from "../components/SpeakingCharacter";
 import { ClipLoader } from 'react-spinners';
 import {useLanguage} from "../components/LanguageContext";
+// import {handleMoodData} from "../components/MoodComponent"
 
 function Simulation() {
 
@@ -43,6 +44,7 @@ function Simulation() {
     const [isLoading, setIsLoading] = useState(false);
     const [questions, setQuestions] = useState({});
     const [questionKeys,setQuestionkeys] = useState([]);
+    const [showAnalysis, setShowAnalysis] = useState(false);
     const { language } = useLanguage();
     const audioSources = [
         "/output1.mp3", // for index 0
@@ -180,13 +182,13 @@ function Simulation() {
         .catch(error => {
             console.error("Error stopping recording:", error);
         });
-
+        //show analysis
+        setShowAnalysis(true);
     }
 
     // Function to stop the video after timer is zero
     const stopVideo = () => {
         setVideo(false);
-        //call to evaluate answer function
     };
 
 
@@ -219,7 +221,8 @@ function Simulation() {
 
         if (showVideo) {
             recordApiCall();
-            //setAnalysis(content)
+            // let content = {"disadvantage1": "Can you explain the concept of RESTful API and how you have implemented it in your projects?"}
+            // setAnalysis(content)
         }
     }, [showVideo]);
 
@@ -238,6 +241,8 @@ function Simulation() {
     const handleNextQuestion = () => {
         setCurrentQuestionIndex(prevIndex => prevIndex + 1);
         console.log(currentQuestionIndex)
+        // hide the analysis
+        setShowAnalysis(false);
     };
 
     // const audioRef = useRef(null);
@@ -293,7 +298,9 @@ function Simulation() {
                                 <Question question={questions[questionKeys[currentQuestionIndex]]} showCards={showCards}
                                           showVideo={showVideo} handleClickButton={handleClickButton} handleSubmit={handleSubmit}
                                           interviewId={interviewerId} answer={analysis}
-                                          handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}/>
+                                          handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}
+                                          showAnalysis={showAnalysis}
+                                          />
 
 
                             }
@@ -312,9 +319,10 @@ function Simulation() {
                                                                                       mphToolsState={mphToolsState}
                                                                                       onTimerEnd={stopVideo}/>
                 }
-                {showVideo && <EngagementComponent onDataAttention={handleAttentionData} onDataArousalValence={handleArousalValencData}/>}
+                {showVideo && <EngagementComponent onDataAttention={handleAttentionData}
+                                                   onDataArousalValence={handleArousalValencData}/>}
                 <hr className="solid" style={{width:"100%"}}></hr>
-                {showVideo && <MoodComponent handleMoodData={handleMoodData}/>}
+                {<MoodComponent handleMoodData={handleMoodData} showVideo={showVideo}/>}
                 <hr className="solid" style={{width:"100%"}}></hr>
                 {showVideo && <EmotionBarsComponent></EmotionBarsComponent>}
                 <hr className="solid" style={{width:"100%"}}></hr>

@@ -6,6 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
+import FeelingsAnalysis from "./FeelingsAnalysis";
 
 const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
     const { t } = useTranslation();
@@ -25,7 +26,7 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
                 {t("analysis_title")}
             </Typography>
             <Grid container spacing={2} justifyContent="center" margin="20px" alignItems="stretch">
-                <Grid item xs={12} sm={3}>
+                <Grid item xs="auto" sm="auto">
                     <Card sx={{ maxWidth: 345 }}>
                         <CardActionArea>
                             <CardContent>
@@ -45,7 +46,7 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
                         </CardActionArea>
                     </Card>
                 </Grid>
-                <Grid item xs={12} sm={3}>
+                <Grid item xs="auto" sm="auto">
                     <Card sx={{ maxWidth: 345 }}>
                         <CardActionArea>
                             <CardContent>
@@ -64,7 +65,7 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
                         </CardActionArea>
                     </Card>
                 </Grid>
-                <Grid item xs={12} sm={3}>
+                <Grid item xs="auto" sm="auto">
                     <Card sx={{ maxWidth: 345 }}>
                         <CardActionArea>
                             <CardContent>
@@ -83,7 +84,7 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
                         </CardActionArea>
                     </Card>
                 </Grid>
-                <Grid item xs={12} sm={3}>
+                <Grid item xs="auto" sm="auto">
                     <Card sx={{ maxWidth: 345 }}>
                         <CardActionArea>
                             <CardContent>
@@ -100,6 +101,7 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
                     </Card>
                 </Grid>
             </Grid>
+            <FeelingsAnalysis/>
             <Grid container justifyContent="center" mt={4}>
                 <Button variant="contained" color="primary" onClick={handleNext}>
                     Next Question
