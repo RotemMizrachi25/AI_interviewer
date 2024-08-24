@@ -29,15 +29,6 @@ async function initAiSdk() {
       enableBalancer: false, // example of custom setting
       smoothness: 0.5,
     })
-    .addModule(globalThis.CY.modules().FACE_GENDER.name, {})
-    .addModule(globalThis.CY.modules().FACE_AGE.name, {
-      windowSizeMs: 4000, // example of custom setting
-      maxVarianceCutoff: Math.pow(7, 2),
-      numericalStability: 1,
-    })
-    .addModule(globalThis.CY.modules().FACE_FEATURES.name, {})
-    .addModule(globalThis.CY.modules().FACE_POSITIVITY.name, {})
-    .addModule(globalThis.CY.modules().FACE_POSE.name, {})
     .addModule(globalThis.CY.modules().FACE_AROUSAL_VALENCE.name, {
       smoothness: 0.9, // example of custom setting
     })

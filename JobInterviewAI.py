@@ -85,7 +85,7 @@ def question_generator_temp(field, flag):
     return generate_chat_call(user_massage, flag, 0.9)
 
 
-def content_analyzer(field, question, answer):
+def content_analyzer(field, question, answer,feelings):
     user_massage = f"I'm a applying for a new job in {field}. In my interview I got this question:" \
                    f"{question}. I answered: {answer}." \
                    f"give me 2 disadvantages and 2 advantages in my answer. give me 2 suggestion of changes I could " \

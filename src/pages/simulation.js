@@ -6,7 +6,6 @@ import '../App.css';
 import '../index.css';
 import EngagementComponent from "../components/EngagementComponent";
 import MoodComponent from "../components/MoodComponent";
-import EmotionBarsComponent from "../components/EmotionBarsComponent";
 import VideoComponent from "../components/VideoComponent";
 import Timer from "../components/Timer";
 import RoundButton from "../components/RoundButton";
@@ -42,6 +41,9 @@ function Simulation() {
     const [isLoading, setIsLoading] = useState(false);
     const [questions, setQuestions] = useState({});
     const [questionKeys,setQuestionkeys] = useState([]);
+    const [valenceres, setValenceres] = useState("");
+    const [attentionres, setAttentionres] = useState("");
+    const [arousalres, setArousalres] = useState("");
     const audioSources = [
         "/output1.mp3", // for index 0
         "/output2.mp3", // for index 1
@@ -103,7 +105,7 @@ function Simulation() {
       }, [questions])
 
 
-    const engageApiCaller = async (fieldName, field) => {
+    const valenceApiCaller = async (fieldName, field) => {
         const response = await fetch(`http://localhost:5000/${fieldName}`,{
             method: 'POST',
             headers: {
@@ -113,7 +115,37 @@ function Simulation() {
         });
 
         const response_json = await response.json();
-        console.log(response_json.results)
+        console.log(response_json);
+        setValenceres(response_json);
+    };
+
+      const attentionApiCaller = async (fieldName, field) => {
+        const response = await fetch(`http://localhost:5000/${fieldName}`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({[fieldName]: field})
+        });
+
+        const response_json = await response.json();
+        console.log(response_json);
+        setAttentionres(response_json);
+    };
+
+      const arousalApiCaller = async (fieldName, field) => {
+        const response = await fetch(`http://localhost:5000/${fieldName}`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({[fieldName]: field})
+        });
+
+        const response_json = await response.json();
+        console.log(response_json);
+        setArousalres(response_json);
+
     };
 
     const handleMoodData = (newAffects) => {
@@ -133,24 +165,28 @@ function Simulation() {
 
     useEffect(() => {
         console.log("MoodData from comp: ", affects);
-        if(affects.length === 120){
+        if(affects.length > 120 && !showVideo){
             console.log("Type MoodData:", typeof moodData);
             moodApiCaller();
+            setAffects([]);
         }
-    }, [affects]);
+    }, [showVideo, affects]);
 
     useEffect(() => {
         console.log("EngageData from comp: ", arousal, valence, attention);
-        if(arousal.length === 120){
-            engageApiCaller("arousal", arousal);
+        if(arousal.length > 120 && !showVideo){
+            arousalApiCaller("arousal", arousal);
+            setArousal([]);
         }
-        if(valence.length === 120){
-            engageApiCaller("valence", valence);
+        if(valence.length > 120 && !showVideo){
+            valenceApiCaller("valence", valence);
+            setValence([]);
         }
-        if(attention.length === 400){
-            engageApiCaller("attention", attention);
+        if(attention.length > 400 && !showVideo){
+            attentionApiCaller("attention", attention);
+            setAttention([]);
         }
-    }, [arousal, valence, attention]);
+    }, [showVideo, arousal, valence, attention]);
 
 
 
@@ -166,6 +202,7 @@ function Simulation() {
 
     const handleSubmit = () => {
         setVideo(!showVideo);
+        console.log("simulation - show video",showVideo);
         fetch('http://localhost:5000/stop-recording', {
         method: 'POST'
         })
@@ -309,11 +346,9 @@ function Simulation() {
                                                                                       mphToolsState={mphToolsState}
                                                                                       onTimerEnd={stopVideo}/>
                 }
-                {showVideo && <EngagementComponent onDataAttention={handleAttentionData} onDataArousalValence={handleArousalValencData}/>}
+                {<EngagementComponent onDataAttention={handleAttentionData} onDataArousalValence={handleArousalValencData} showVideo={showVideo}/>}
                 <hr className="solid" style={{width:"100%"}}></hr>
-                {showVideo && <MoodComponent handleMoodData={handleMoodData}/>}
-                <hr className="solid" style={{width:"100%"}}></hr>
-                {showVideo && <EmotionBarsComponent></EmotionBarsComponent>}
+                {<MoodComponent handleMoodData={handleMoodData} showVideo={showVideo}/>}
                 <hr className="solid" style={{width:"100%"}}></hr>
             </div>
         </div>

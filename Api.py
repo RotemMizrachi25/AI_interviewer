@@ -12,6 +12,7 @@ CORS(app)
 import speechTotext
 
 FILE_DIRECTORY = os.getcwd()
+feelings = {}
 
 @app.route('/weighted_emotions', methods=['POST'])
 def weighted_emotions():
@@ -69,34 +70,24 @@ def submit_data():
 
 @app.route('/affects', methods=['POST'])
 def dominante_moods():
-    dominante = []
+    global feelings
     data = request.get_json()  # This will get the JSON data sent with the POST
     if not data:
         return jsonify({'error': 'No data received'}), 400
 
-    print("Received data:", data)  # Log the received data
-    print(type(data), type(data['affects'][0]))
+    #print("Received data:", data)  # Log the received data
+    #print(type(data), type(data['affects'][0]))
 
-    for key, val in data['affects'][0].items():
-        if val > 0.5:
-            dominante.append(key)
+    # show_feelings(data['affects'])
+    mean_data = mean_calc(data['affects'])
+    print(mean_data)
+    temp ={}
+    for key, value in mean_data.items():
+        if value > 0.65:
+            temp[key]=value
+    feelings.update(temp)
+    print(feelings)
 
-    print("dominate feelings are: " + ", ".join(dominante))
-
-    # Example: return received data or some processed result
-    return jsonify({'message': 'Data processed', 'yourData': data}), 200
-
-
-@app.route('/valence', methods=['POST'])
-def valence():
-    dominante = []
-    data = request.get_json()  # This will get the JSON data sent with the POST
-    if not data:
-        return jsonify({'error': 'No data received'}), 400
-
-    print("Received data:", data)  # Log the received data
-    # print(type(data), type(data['affects'][0]))
-    #
     # for key, val in data['affects'][0].items():
     #     if val > 0.5:
     #         dominante.append(key)
@@ -107,8 +98,53 @@ def valence():
     return jsonify({'message': 'Data processed', 'yourData': data}), 200
 
 
+def show_feelings(data_received):
+    data = {}
+    # how many times the feeling was above 0.6
+    for sample in data_received:
+        for feeling, value in sample.items():
+            if feeling in data and sample[feeling] >= 0.6:
+                data[feeling] += 1
+            elif sample[feeling] >= 0.6:
+                data[feeling] = 1
+    print(data)
+
+def mean_calc(data_received):
+    mean_data = {}
+    samples_counter = len(data_received)
+    for sample in data_received:
+        for feeling, value in sample.items():
+            if feeling in mean_data:
+                mean_data[feeling] += value
+            else:
+                mean_data[feeling] = value
+    for feeling, value in mean_data.items():
+        mean_data[feeling] = value / samples_counter
+    return mean_data
+
+@app.route('/valence', methods=['POST'])
+def valence():
+    dominante = []
+    data = request.get_json()  # This will get the JSON data sent with the POST
+    if not data:
+        return jsonify({'error': 'No data received'}), 400
+
+    valence = sum(data['valence'])/len(data['valence'])
+
+    print("valence:", valence)  # Log the received data
+
+    # Example: return received data or some processed result
+    if valence > -0.3 and valence < 0.3:
+        return "Natural"
+    elif valence > 0.3:
+        return "Positive"
+    else:
+        return "Negative"
+
+
 @app.route('/record', methods=['POST'])
 def recorder():
+    global feelings
     data = request.get_json()  # This will get the JSON data sent with the POST
     if not data:
         return jsonify({'error': 'No data received'}), 400
@@ -121,12 +157,17 @@ def recorder():
     # thread.start()
     # thread.join()
     print(answer)
+    while True:
+        if len(feelings)>0:
+            break
+    print(feelings)
     # if answer is not []:
-    #     analysis = content_analyzer(data["field"], data["question"], answer[0])
+    #     analysis = content_analyzer(data["field"], data["question"], answer[0],feelings.keys())
     # else:
-    #     analysis = content_analyzer(data["field"], data["question"], "")
-    # print(analysis)
+    #     analysis = content_analyzer(data["field"], data["question"], "",feelings.keys())
+    #print(analysis)
     analysis = {"disadvantage1":"","disadvantage2":"","advantage1":"","advantage2":"","suggestion1":"","suggestion2":"","revised answer":""}
+    print(analysis)
     return analysis
 
     # Example: return received data or some processed result
@@ -145,12 +186,16 @@ def arousal():
     if not data:
         return jsonify({'error': 'No data received'}), 400
     print(data)
-    count = sum(1 for value in data['arousal'] if value > 0.5)
-    total = len(data)
-    percentage = (count / total) * 100
-    print("you had your arousal on the interview " + str(percentage) + "precent of the time")
-    # Example: return received data or some processed result
-    return jsonify({'message': 'Data processed', 'yourData': data}), 200
+    count = sum(data['arousal'])
+    total = len(data['arousal'])
+    percentage = (count / total)
+    print("you had your arousal on the interview " + str(percentage) + "% of the time")
+    if percentage > -0.3 and percentage < 0.3:
+        return "Natural"
+    elif percentage >0.3:
+        return "Positive"
+    else:
+        return "Negative"
 
 
 @app.route('/attention', methods=['POST'])
@@ -161,13 +206,13 @@ def attention():
 
     print("Received data:", data)  # Log the received data
 
-    count = sum(1 for value in data['attention'] if value > 0.5)
-    total = len(data)
+    count = sum(data['attention'])
+    total = len(data['attention'])
     percentage = (count / total) * 100
-    print("you had your attention to the interview " + str(percentage) + "precent of the time")
+    print("you had your attention to the interview " + str(percentage) + "%  of the time")
 
     # Example: return received data or some processed result
-    return jsonify({'message': 'Data processed', 'yourData': data}), 200
+    return round(percentage)
 
 @app.route('/media/<path:filename>')
 def serve_file(filename):
