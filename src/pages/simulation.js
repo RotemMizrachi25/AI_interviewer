@@ -18,6 +18,8 @@ import Typography from "@mui/material/Typography";
 import Question from "../components/Question";
 import SpeakingCharacter from "../components/SpeakingCharacter";
 import { ClipLoader } from 'react-spinners';
+import {useLanguage} from "../components/LanguageContext";
+// import {handleMoodData} from "../components/MoodComponent"
 
 function Simulation() {
 
@@ -44,6 +46,8 @@ function Simulation() {
     const [valenceres, setValenceres] = useState("");
     const [attentionres, setAttentionres] = useState("");
     const [arousalres, setArousalres] = useState("");
+    const [showAnalysis, setShowAnalysis] = useState(false);
+    const { language } = useLanguage();
     const audioSources = [
         "/output1.mp3", // for index 0
         "/output2.mp3", // for index 1
@@ -66,12 +70,13 @@ function Simulation() {
     };
 
     const recordApiCall = async () => {
+        alert(language);
         const response = await fetch(`http://localhost:5000/record`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({language: "he-IL", question: questions[questionKeys[currentQuestionIndex]], field:selectedField})
+            body: JSON.stringify({language: language, question: questions[questionKeys[currentQuestionIndex]], field:selectedField})
         });
         //console.log(response);
         const response_json = await response.json();
@@ -115,8 +120,8 @@ function Simulation() {
         });
 
         const response_json = await response.json();
-        console.log(response_json);
-        setValenceres(response_json);
+        console.log(response_json['pleasantness_level']);
+        setValenceres(response_json['pleasantness_level']);
     };
 
       const attentionApiCaller = async (fieldName, field) => {
@@ -129,8 +134,8 @@ function Simulation() {
         });
 
         const response_json = await response.json();
-        console.log(response_json);
-        setAttentionres(response_json);
+        console.log(response_json['percentage_attention']);
+        setAttentionres(response_json['percentage_attention']);
     };
 
       const arousalApiCaller = async (fieldName, field) => {
@@ -143,8 +148,8 @@ function Simulation() {
         });
 
         const response_json = await response.json();
-        console.log(response_json);
-        setArousalres(response_json);
+        console.log(response_json['overall_arousal']);
+        setArousalres(response_json['overall_arousal']);
 
     };
 
@@ -214,13 +219,13 @@ function Simulation() {
         .catch(error => {
             console.error("Error stopping recording:", error);
         });
-
+        //show analysis
+        setShowAnalysis(true);
     }
 
     // Function to stop the video after timer is zero
     const stopVideo = () => {
         setVideo(false);
-        //call to evaluate answer function
     };
 
 
@@ -253,7 +258,8 @@ function Simulation() {
 
         if (showVideo) {
             recordApiCall();
-            //setAnalysis(content)
+            // let content = {"disadvantage1": "Can you explain the concept of RESTful API and how you have implemented it in your projects?"}
+            // setAnalysis(content)
         }
     }, [showVideo]);
 
@@ -272,6 +278,8 @@ function Simulation() {
     const handleNextQuestion = () => {
         setCurrentQuestionIndex(prevIndex => prevIndex + 1);
         console.log(currentQuestionIndex)
+        // hide the analysis
+        setShowAnalysis(false);
     };
 
     // const audioRef = useRef(null);
@@ -327,7 +335,9 @@ function Simulation() {
                                 <Question question={questions[questionKeys[currentQuestionIndex]]} showCards={showCards}
                                           showVideo={showVideo} handleClickButton={handleClickButton} handleSubmit={handleSubmit}
                                           interviewId={interviewerId} answer={analysis}
-                                          handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}/>
+                                          handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}
+                                          showAnalysis={showAnalysis} attention={attention} engagement={engagement} pleasantness={pleasantness}
+                                          />
 
 
                             }

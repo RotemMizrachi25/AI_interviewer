@@ -8,8 +8,10 @@ import RoundButton from "./RoundButton";
 import Box from '@mui/material/Box';
 import {useTranslation} from "react-i18next";
 import Analysis from "./Analysis";
+import MoodComponent from "./MoodComponent";
+import FeelingsAnalysis from "./FeelingsAnalysis";
 
-const Question = ({question, showCards, showVideo, handleClickButton, handleSubmit, interviewId, answer, handleNextQuestion, currentQuestionIndex}) => {
+const Question = ({question, showCards, showVideo, handleClickButton, handleSubmit, interviewId, answer, handleNextQuestion, currentQuestionIndex, showAnalysis}) => {
     let open_mouth_image, closed_mouth_img;
     const { t } = useTranslation();
     const audioRef = useRef(null);
@@ -90,12 +92,16 @@ const Question = ({question, showCards, showVideo, handleClickButton, handleSubm
                 isSpeaking={isSpeaking}/>
             {!showCards && (
                 showVideo ? (
-                    <RoundButton onClick={handleSubmit}> Submit Answer</RoundButton>
+                    <>
+                        <RoundButton onClick={handleSubmit}> Submit Answer</RoundButton>
+                    </>
+
                 ) : (
                     <RoundButton onClick={handleClickButton}> Ready to Answer</RoundButton>
                 ))}
 
-            {!answer.isEmpty && <Analysis answer={answer} handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}/>}
+            {showAnalysis && <Analysis answer={answer} handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}
+            attention={attention} engagement={engagement} pleasantness={pleasantness}/>}
 
 
             <div>
@@ -112,7 +118,10 @@ const Question = ({question, showCards, showVideo, handleClickButton, handleSubm
                 }}
                 onClick={handleNextQuestion}
             >{t('skip_button')}<BsSkipEndFill/></Button>
+            <br/>
+            <br/>
         </Box>
+
     )};
 
 export default Question;

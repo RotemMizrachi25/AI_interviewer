@@ -91,14 +91,16 @@ def transcribe_audio(audio_file_path, language):
     with io.open(audio_file_path, "rb") as audio_file:
         content = audio_file.read()
 
+    if language is 'he':
+        language = "he-IL"
+    else:
+        language = "en-US"
     # Configure the audio settings
     audio = speech.RecognitionAudio(content=content)
     config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,  # Adjust this based on your audio file
         sample_rate_hertz=44100,  # Adjust this if your file has a different sample rate
-
-        language_code=language #"he-IL",  # Hebrew language code en-US
-
+        language_code=language
     )
 
     # Perform the transcription

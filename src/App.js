@@ -10,21 +10,22 @@ import {
 import {Home} from "./pages/home";
 import Simulation from "./pages/simulation"
 import {ThemeProvider} from "@mui/material";
+import { LanguageProvider } from './components/LanguageContext';
 
 
 function App() {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <Router>
-                    <Nav/>
-                    <Routes>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/simulation" element={<Simulation />} />
-
-
-                    </Routes>
-                </Router>
+                <LanguageProvider>
+                    <Router>
+                        <Nav/>
+                        <Routes>
+                                <Route path="/" element={<Home />} />
+                                <Route path="/simulation" element={<Simulation />} />
+                        </Routes>
+                    </Router>
+                </LanguageProvider>
             </ThemeProvider>
         </>
     );
