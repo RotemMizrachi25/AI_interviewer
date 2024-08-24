@@ -413,7 +413,7 @@ def serve_file(filename):
 def emotion_graph():
     global feelings
 
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(6, 4))
     plt.bar(feelings.keys(), feelings.values(), color='skyblue')
     plt.xlabel('Emotions')
     plt.ylabel('Values')
