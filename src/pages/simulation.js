@@ -120,7 +120,7 @@ function Simulation() {
         });
 
         const response_json = await response.json();
-        console.log(response_json['pleasantness_level']);
+        console.log("valence:" , response_json['pleasantness_level']);
         setValenceres(response_json['pleasantness_level']);
     };
 
@@ -148,7 +148,7 @@ function Simulation() {
         });
 
         const response_json = await response.json();
-        console.log(response_json['overall_arousal']);
+        console.log("arousal", response_json['overall_arousal']);
         setArousalres(response_json['overall_arousal']);
 
     };
@@ -336,7 +336,7 @@ function Simulation() {
                                           showVideo={showVideo} handleClickButton={handleClickButton} handleSubmit={handleSubmit}
                                           interviewId={interviewerId} answer={analysis}
                                           handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}
-                                          showAnalysis={showAnalysis} attention={attention} engagement={engagement} pleasantness={pleasantness}
+                                          showAnalysis={showAnalysis} attention={attentionres} engagement={arousalres} pleasantness={valenceres}
                                           />
 
 

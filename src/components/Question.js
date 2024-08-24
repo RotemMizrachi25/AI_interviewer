@@ -11,7 +11,7 @@ import Analysis from "./Analysis";
 import MoodComponent from "./MoodComponent";
 import FeelingsAnalysis from "./FeelingsAnalysis";
 
-const Question = ({question, showCards, showVideo, handleClickButton, handleSubmit, interviewId, answer, handleNextQuestion, currentQuestionIndex, showAnalysis}) => {
+const Question = ({question, showCards, showVideo, handleClickButton, handleSubmit, interviewId, answer, handleNextQuestion, currentQuestionIndex, showAnalysis, attention , engagement,pleasantness}) => {
     let open_mouth_image, closed_mouth_img;
     const { t } = useTranslation();
     const audioRef = useRef(null);

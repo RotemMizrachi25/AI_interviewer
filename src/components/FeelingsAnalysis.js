@@ -72,7 +72,7 @@ const FeelingsAnalysis = ({attention, engagement, pleasantness}) => {
                                     {t("pleasetness")}
                                 </Typography>
                                 <Typography variant="body1" fontWeight={700} color={pleasantnessColor}>
-                                    {engagement}
+                                    {pleasantness}
                                 </Typography>
                             </CardContent>
                         </CardActionArea>

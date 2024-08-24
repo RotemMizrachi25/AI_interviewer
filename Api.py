@@ -6,6 +6,7 @@ from flask import Flask, request, jsonify,send_from_directory
 from flask_cors import CORS
 from JobInterviewAI import generate_questions,content_analyzer
 import threading
+import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 CORS(app)
@@ -247,6 +248,7 @@ def dominante_moods():
             temp[key]=value
     feelings.update(temp)
     print(feelings)
+    return feelings
 
 
 
@@ -323,6 +325,7 @@ def recorder():
         if len(feelings)>0:
             break
     print(feelings)
+    emotion_graph()
     # if answer is not []:
     #     analysis = content_analyzer(data["field"], data["question"], answer[0],feelings.keys())
     # else:
@@ -362,11 +365,11 @@ def arousal():
 
     # Determine the overall arousal state
     if positive_percentage > negative_percentage:
-        overall_arousal = "Positive Arousal"
+        overall_arousal = "Positive"
     elif negative_percentage > positive_percentage:
-        overall_arousal = "Negative Arousal"
+        overall_arousal = "Negative"
     else:
-        overall_arousal = "Neutral Arousal"
+        overall_arousal = "Neutral"
 
     # Output message
     print(f"Positive arousal: {positive_percentage}%")
@@ -407,28 +410,19 @@ def serve_file(filename):
     return send_from_directory(FILE_DIRECTORY, filename)
 
 
-@app.route('/emotion_graph', methods=['POST'])
 def emotion_graph():
-    data = request.get_json()
-    if not data:
-        return jsonify({'error': 'No data received'}), 400
+    global feelings
 
-    emotions = data['affects'][0]
-    names = list(emotions.keys())
-    values = list(emotions.values())
-
-    plt.figure(figsize=(10, 5))
-    plt.bar(names, values)
+    plt.figure(figsize=(10, 6))
+    plt.bar(feelings.keys(), feelings.values(), color='skyblue')
     plt.xlabel('Emotions')
-    plt.ylabel('Intensity')
-    plt.title('Emotion Analysis')
+    plt.ylabel('Values')
+    plt.title('Emotions with Values Above 0.65')
+    plt.xticks(rotation=45, ha="right")  # Rotate labels for better readability
+    plt.tight_layout()
 
-    img = io.BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    img_base64 = base64.b64encode(img.getvalue()).decode('utf8')
-
-    return jsonify({'emotion_graph': img_base64, 'yourData': data}), 200
+    # Save the plot as an image file
+    plt.savefig(os.path.join(FILE_DIRECTORY,'emotions.png'))
 
 
 if __name__ == '__main__':

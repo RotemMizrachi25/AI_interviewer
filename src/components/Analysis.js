@@ -8,9 +8,20 @@ import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import FeelingsAnalysis from "./FeelingsAnalysis";
 
-const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
+const Analysis = ({answer, handleNextQuestion, currentQuestionIndex,attention,engagement,pleasantness}) => {
     const { t } = useTranslation();
     const [currentAnswer, setCurrentAnswer] = useState(answer);
+    const [imageSrc, setImageSrc] = useState(null);
+
+  useEffect(() => {
+    // Fetch the image blob from the backend
+    fetch('http://localhost:5000/media/emotions.png')  // Replace with your actual endpoint
+      .then(response => response.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob);  // Create an object URL from the blob
+        setImageSrc(url);
+      });
+  }, [answer]);
 
     const handleNext = () => {
         setCurrentAnswer({}); // Clear the current answer
@@ -28,7 +39,7 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
             </Typography>
             <Grid container spacing={2} justifyContent="center" margin="20px" alignItems="stretch">
                 <Grid item xs="auto" sm="auto">
-                    <Card sx={{ maxWidth: 345 }}>
+                    <Card sx={{maxWidth: 345}}>
                         <CardActionArea>
                             <CardContent>
                                 <Typography gutterBottom variant="body1" fontWeight={900} component="div"
@@ -48,7 +59,7 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
                     </Card>
                 </Grid>
                 <Grid item xs="auto" sm="auto">
-                    <Card sx={{ maxWidth: 345 }}>
+                    <Card sx={{maxWidth: 345}}>
                         <CardActionArea>
                             <CardContent>
                                 <Typography gutterBottom variant="body1" fontWeight={900} component="div">
@@ -67,7 +78,7 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
                     </Card>
                 </Grid>
                 <Grid item xs="auto" sm="auto">
-                    <Card sx={{ maxWidth: 345 }}>
+                    <Card sx={{maxWidth: 345}}>
                         <CardActionArea>
                             <CardContent>
                                 <Typography gutterBottom variant="body1" fontWeight={900} component="div">
@@ -86,7 +97,7 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
                     </Card>
                 </Grid>
                 <Grid item xs="auto" sm="auto">
-                    <Card sx={{ maxWidth: 345 }}>
+                    <Card sx={{maxWidth: 345}}>
                         <CardActionArea>
                             <CardContent>
                                 <Typography gutterBottom variant="body1" fontWeight={900} component="div">
@@ -108,6 +119,7 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
                     Next Question
                 </Button>
             </Grid>
+            {imageSrc ? <img src={imageSrc} alt="Emotions Above 0.65" /> : <p>Loading image...</p>}
         </>
     )
 }
