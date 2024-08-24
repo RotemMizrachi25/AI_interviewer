@@ -100,7 +100,8 @@ const Question = ({question, showCards, showVideo, handleClickButton, handleSubm
                     <RoundButton onClick={handleClickButton}> Ready to Answer</RoundButton>
                 ))}
 
-            {showAnalysis && <Analysis answer={answer} handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}/>}
+            {showAnalysis && <Analysis answer={answer} handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}
+            attention={attention} engagement={engagement} pleasantness={pleasantness}/>}
 
 
             <div>

@@ -101,7 +101,7 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex}) => {
                     </Card>
                 </Grid>
             </Grid>
-            <FeelingsAnalysis/>
+            <FeelingsAnalysis attention={attention} engagement={engagement} pleasantness={pleasantness}/>
             <Grid container justifyContent="center" mt={4}>
                 <Button variant="contained" color="primary" onClick={handleNext}>
                     Next Question

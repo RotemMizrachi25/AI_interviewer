@@ -299,7 +299,7 @@ function Simulation() {
                                           showVideo={showVideo} handleClickButton={handleClickButton} handleSubmit={handleSubmit}
                                           interviewId={interviewerId} answer={analysis}
                                           handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}
-                                          showAnalysis={showAnalysis}
+                                          showAnalysis={showAnalysis} attention={attention} engagement={engagement} pleasantness={pleasantness}
                                           />
 
 
