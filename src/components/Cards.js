@@ -5,9 +5,11 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions, Grid, FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
 import { useTranslation } from "react-i18next";
+import {useEffect} from "react";
 
 export default function InterviewerCards({ func }) {
     const { t } = useTranslation();
+    const { i18n } = useTranslation();
     const [selectedField, setSelectedField] = React.useState('');
     const [role, setRole] = React.useState('');
 
@@ -50,6 +52,16 @@ export default function InterviewerCards({ func }) {
         }
     };
 
+    useEffect(() => {
+        // Set the dir attribute on the body tag based on the current language
+        document.body.dir = i18n.language === 'he' ? 'rtl' : 'ltr';
+    }, [i18n.language]);
+
+    useEffect(() => {
+        // Update the document or body font based on the language
+        document.body.style.fontFamily = i18n.language === 'he' ? 'Varela Round, Tahoma' : 'Default Font';
+    }, [i18n.language]);
+
     return (
         <>
             <Typography variant="h3" align="center" gutterBottom color="darkblue" fontWeight={900}>
@@ -73,10 +85,10 @@ export default function InterviewerCards({ func }) {
                             />
                             <CardContent sx={{ minHeight: 140 }}>
                                 <Typography gutterBottom variant="h5" component="div">
-                                    Chris
+                                    {t("Chris")}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    Chris is a highly disciplined and strict interviewer who rigorously evaluates candidates with challenging questions, and unwavering high standards.
+                                    {t("Chris_ex")}
                                 </Typography>
                             </CardContent>
                             <CardActions>
@@ -102,10 +114,10 @@ export default function InterviewerCards({ func }) {
                             />
                             <CardContent sx={{ minHeight: 140 }}>
                                 <Typography gutterBottom variant="h5" component="div">
-                                    Nelly
+                                    {t("Nelly")}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    Nelly is an empathetic behavioral interviewer who focuses on understanding a candidate’s past experiences and actions to assess how they align with the role’s requirements.
+                                    {t("Nelly_ex")}
                                 </Typography>
                             </CardContent>
                             <CardActions>
@@ -131,10 +143,10 @@ export default function InterviewerCards({ func }) {
                             />
                             <CardContent sx={{ minHeight: 140 }}>
                                 <Typography gutterBottom variant="h5" component="div">
-                                    Sheldon
+                                    {t("Sheldon")}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    Sheldon is a highly analytical technical interviewer who delves deep into candidates' technical skills and problem-solving abilities.
+                                    {t("Sheldon_ex")}
                                 </Typography>
                             </CardContent>
                             <CardActions>
@@ -160,10 +172,10 @@ export default function InterviewerCards({ func }) {
                             />
                             <CardContent sx={{ minHeight: 140 }}>
                                 <Typography gutterBottom variant="h5" component="div">
-                                    Lisa
+                                    {t("Lisa")}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    Lisa is a friendly interviewer who creates a supportive environment, encouraging candidates to feel comfortable while sharing their experiences and qualifications.
+                                    {t("Lisa_ex")}
                                 </Typography>
                             </CardContent>
                             <CardActions sx={{ mt: 'auto' }}>
@@ -177,7 +189,7 @@ export default function InterviewerCards({ func }) {
             {/* Additional Form for Field and Role Selection */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', padding: '20px' }}>
                 <Typography variant="h4" gutterBottom>
-                    Select Your Field and Role
+                    {t("selectRole_title")}
                 </Typography>
 
                 <FormControl sx={{ minWidth: 300 }}>

@@ -5,5 +5,14 @@
   "home": "Home",
   "start": "Start",
   "skip_button": "skip question",
-  "start_simulation_card": "start"
+  "start_simulation_card": "start",
+  "Chris" : "Chris",
+  "Chris_ex": "Chris is a highly disciplined and strict interviewer who rigorously evaluates candidates with challenging questions, and unwavering high standards.",
+  "Nelly" : "Nelly",
+  "Nelly_ex": "Nelly is an empathetic behavioral interviewer who focuses on understanding a candidate’s past experiences and actions to assess how they align with the role’s requirements.",
+  "Sheldon": "Sheldon",
+  "Sheldon_ex": "Sheldon is a highly analytical technical interviewer who delves deep into candidates' technical skills and problem-solving abilities.",
+  "Lisa": "Lisa",
+  "Lisa_ex": "Lisa is a friendly interviewer who creates a supportive environment, encouraging candidates to feel comfortable while sharing their experiences and qualifications.",
+  "selectRole_title": "Select Your Field and Role"
 }
