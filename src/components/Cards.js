@@ -11,7 +11,28 @@ export default function InterviewerCards({ func }) {
     const [selectedField, setSelectedField] = React.useState('');
     const [role, setRole] = React.useState('');
 
-    const fields = ['Software Development', 'Data Science', 'Product Management', 'Marketing', 'Finance'];
+    const fields = [
+        "Software Development",
+        "Data Science",
+        "Product Management",
+        "Marketing",
+        "Finance",
+        "Cybersecurity",
+        "Cloud Computing",
+        "Artificial Intelligence",
+        "Machine Learning",
+        "Blockchain",
+        "User Experience Design",
+        "Network Engineering",
+        "Systems Architecture",
+        "Technical Support",
+        "Sales Engineering",
+        "Quality Assurance",
+        "Data Analysis",
+        "Human Resources",
+        "Project Management",
+        "Business Analysis"
+    ];
 
     const handleFieldChange = (event) => {
         setSelectedField(event.target.value);

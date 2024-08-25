@@ -1,65 +1,8 @@
-// import React, {useEffect, useRef, useState} from "react";
-// import {getAiSdkControls} from "../helpers/ai-sdk/loader";
-// import {useExternalScript} from "../helpers/ai-sdk/externalScriptsLoader";
-// import Timer from "./Timer";
-//
-// const VideoComponent = ({showVideo, aiSdkState, mphToolsState, onTimerEnd}) => {
-//     //const mphToolsState = useExternalScript("https://sdk.morphcast.com/mphtools/v1.0/mphtools.js");
-//     //const aiSdkState = useExternalScript("https://ai-sdk.morphcast.com/v1.16/ai-sdk.js");
-//     const videoEl = useRef(null);
-//     const [mediaStream, setMediaStream] = useState(null);
-//
-//     useEffect(() => {
-//         let stream;
-//         videoEl.current = document.getElementById("videoEl");
-//         async function getAiSdk (){
-//             if(aiSdkState === "ready" && mphToolsState === "ready"){
-//                 const { source, start } = await getAiSdkControls();
-//
-//                 stream = await source.useCamera({
-//                     toVideoElement: videoEl.current,
-//                 });
-//                 await start();
-//                 setMediaStream(stream);
-//             }
-//
-//         }
-//         if (showVideo) {
-//             if (!mediaStream) {
-//                 getAiSdk();
-//             }
-//         } else {
-//             if (mediaStream) {
-//                 console.log("Stopping camera...");
-//                 //alert("closing");
-//                 mediaStream.getTracks().forEach((track) => track.stop());
-//                 setMediaStream(null);
-//                 console.log("Camera stopped.");
-//             }
-//         }
-//         // Cleanup function to stop the stream when the component is unmounted
-//         return () => {
-//             console.log("inside return")
-//             //alert("return");
-//             if (mediaStream) {
-//                 mediaStream.getTracks().forEach((track) => track.stop());
-//             }
-//         };
-//     }, [aiSdkState, mphToolsState, showVideo, showVideo]);
-//
-//
-//     return(
-//         <div style={{width:"640px", height: "480px", position:"relative"}}>
-//             <Timer onTimerEnd={onTimerEnd}/>
-//             <video id="videoEl"></video>
-//         </div>
-//     );
-// }
-// export default VideoComponent;
-//
+
 import React, { useEffect, useRef } from "react";
 import { getAiSdkControls } from "../helpers/ai-sdk/loader";
 import Timer from "./Timer";
+import Box from "@mui/material/Box";
 
 const VideoComponent = ({ showVideo, aiSdkState, mphToolsState, onTimerEnd }) => {
   const videoEl = useRef(null);
@@ -120,10 +63,24 @@ const VideoComponent = ({ showVideo, aiSdkState, mphToolsState, onTimerEnd }) =>
   }, [aiSdkState, mphToolsState, showVideo]);
 
   return (
-    <div style={{ width: "640px", height: "480px", position: "relative" }}>
-      <Timer onTimerEnd={onTimerEnd} />
-      <video id="videoEl" ref={videoEl}></video>
-    </div>
+    // <div style={{ width: "640px", height: "480px", position: "relative" }}>
+    //   <Timer onTimerEnd={onTimerEnd} />
+    //   <video id="videoEl" ref={videoEl}></video>
+    // </div>
+      <Box sx={{
+        width: 640,
+        height: 480,
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center', // Centers vertically
+        alignItems: 'center', // Centers horizontally
+      }}>
+        <Timer onTimerEnd={onTimerEnd} />
+        <video id="videoEl" ref={videoEl} style={{ width: '100%', height: 'auto' }}></video>
+        <br/>
+        <br/>
+      </Box>
   );
 };
 

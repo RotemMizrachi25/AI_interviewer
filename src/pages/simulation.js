@@ -19,14 +19,10 @@ import Question from "../components/Question";
 import SpeakingCharacter from "../components/SpeakingCharacter";
 import { ClipLoader } from 'react-spinners';
 import {useLanguage} from "../components/LanguageContext";
+import Loader from "../components/Loader";
 // import {handleMoodData} from "../components/MoodComponent"
 
 function Simulation() {
-
-    //camera and video
-    const mphToolsState = useExternalScript("https://sdk.morphcast.com/mphtools/v1.0/mphtools.js");
-    const aiSdkState = useExternalScript("https://ai-sdk.morphcast.com/v1.16/ai-sdk.js");
-    const videoEl = useRef(undefined)
     // Mood Data
     const [affects, setAffects] = useState([]);
     //Engagement
@@ -47,6 +43,7 @@ function Simulation() {
     const [attentionres, setAttentionres] = useState("");
     const [arousalres, setArousalres] = useState("");
     const [showAnalysis, setShowAnalysis] = useState(false);
+    const [isReadyAnalysis, setReadyAnalysis] = useState(false);
     const { language } = useLanguage();
     const audioSources = [
         "/output1.mp3", // for index 0
@@ -70,7 +67,6 @@ function Simulation() {
     };
 
     const recordApiCall = async () => {
-        alert(language);
         const response = await fetch(`http://localhost:5000/record`,{
             method: 'POST',
             headers: {
@@ -96,8 +92,6 @@ function Simulation() {
         const response_json = await response.json();
         console.log(response_json);
         setQuestions(response_json);
-        // setIsLoading(false);
-        // setQuestion(true);
     };
 
       useEffect(() => {
@@ -136,6 +130,7 @@ function Simulation() {
         const response_json = await response.json();
         console.log(response_json['percentage_attention']);
         setAttentionres(response_json['percentage_attention']);
+          setReadyAnalysis(true);
     };
 
       const arousalApiCaller = async (fieldName, field) => {
@@ -196,13 +191,7 @@ function Simulation() {
 
 
     const handleClickButton = () => {
-        //next: call to evaluate answer if changes from true to false
         setVideo(!showVideo);
-        // calling record function from API
-        // if(showVideo){
-        //     alert("in handle clickkkkkk");
-        //     recordApiCall();
-        // }
     }
 
     const handleSubmit = () => {
@@ -221,7 +210,9 @@ function Simulation() {
         });
         //show analysis
         setShowAnalysis(true);
+
     }
+
 
     // Function to stop the video after timer is zero
     const stopVideo = () => {
@@ -235,16 +226,8 @@ function Simulation() {
         setInterviewerId(interviewerId);
         setRole(role);
         setSelectedField(selectedField)
-        alert(interviewerId);
-        alert(role);
-        alert(selectedField);
         //generate the interview questions
         setIsLoading(true);
-    //     setTimeout(() => {
-    //     // After 15 seconds, stop loading and show the question
-    //         setIsLoading(false);
-    //         setQuestion(true);
-    // }, 30000); // 15,000 milliseconds = 15 seconds
     };
 
     useEffect(() => {
@@ -280,27 +263,9 @@ function Simulation() {
         console.log(currentQuestionIndex)
         // hide the analysis
         setShowAnalysis(false);
+        setReadyAnalysis(false);
     };
 
-    // const audioRef = useRef(null);
-
-    // Play the audio when the component is rendered or when the question changes
-    // useEffect(() => {
-    //     console.log("hi")
-    //     alert("hi")
-    //     if (audioSources[currentQuestionIndex]) {
-    //         console.log("hi")
-    //         audioRef.current.src = audioSources[currentQuestionIndex]; // Set the new audio source
-    //         audioRef.current.load(); // Load the new audio source
-    //         audioRef.current.play()
-    //             .then(() => {
-    //                 console.log('Audio is playing');
-    //             })
-    //             .catch((error) => {
-    //                 console.log('Error playing audio:', error);
-    //             });
-    //     }
-    // }, [audioRef]);
 
 
     return (
@@ -316,50 +281,34 @@ function Simulation() {
                     {showCards && <InterviewerCards func={hideCards}/>}
                 </div>
                 <div>
-                   {isLoading && (
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '100vh',
-                        flexDirection: 'column'
-                    }}>
-                        <ClipLoader size={50} color={"#123abc"} loading={isLoading} />
-                        <p>Loading... Please wait</p>
-                    </div>)}
-                    </div>
+                    {isLoading && <Loader isLoading={isLoading}/>}
+                </div>
                 <div>
 
 
                             {showQuestion &&
                                 <Question question={questions[questionKeys[currentQuestionIndex]]} showCards={showCards}
-                                          showVideo={showVideo} handleClickButton={handleClickButton} handleSubmit={handleSubmit}
+                                          showVideo={showVideo} setVideo={setVideo} handleClickButton={handleClickButton} handleSubmit={handleSubmit}
                                           interviewId={interviewerId} answer={analysis}
                                           handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}
                                           showAnalysis={showAnalysis} attention={attentionres} engagement={arousalres} pleasantness={valenceres}
+                                          isReadyAnalysis={isReadyAnalysis}
                                           />
 
 
                             }
                         </div>
                         <br/>
-                    {/*<hr className="solid" style={{width:"100%", color:"darkblue", backgroundColor:"darkblue", height:2}}></hr>*/}
+                {/*<div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>*/}
+                {/*    {!showCards && showVideo && <VideoComponent showVideo={showVideo} aiSdkState={aiSdkState}*/}
+                {/*                                                mphToolsState={mphToolsState}*/}
+                {/*                                                onTimerEnd={stopVideo}/>*/}
+                {/*    }*/}
+                {/*</div>*/}
 
-                    {/*{!showCards && (*/}
-                    {/*    showVideo ? (*/}
-                    {/*        <RoundButton onClick={handleClickButton}> Submit Answer</RoundButton>*/}
-                    {/*    ) : (*/}
-                    {/*        <RoundButton onClick={handleClickButton}> Ready to Answer</RoundButton>*/}
-                    {/*    ))}*/}
-
-                    {!showCards && showVideo && <VideoComponent showVideo={showVideo} aiSdkState={aiSdkState}
-                                                                                      mphToolsState={mphToolsState}
-                                                                                      onTimerEnd={stopVideo}/>
-                }
                 {<EngagementComponent onDataAttention={handleAttentionData} onDataArousalValence={handleArousalValencData} showVideo={showVideo}/>}
-                <hr className="solid" style={{width:"100%"}}></hr>
                 {<MoodComponent handleMoodData={handleMoodData} showVideo={showVideo}/>}
-                <hr className="solid" style={{width:"100%"}}></hr>
+
             </div>
         </div>
 );

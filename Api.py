@@ -404,7 +404,6 @@ def attention():
     }), 200
 
 
-
 @app.route('/media/<path:filename>')
 def serve_file(filename):
     return send_from_directory(FILE_DIRECTORY, filename)
@@ -412,17 +411,19 @@ def serve_file(filename):
 
 def emotion_graph():
     global feelings
+    try:
+        plt.figure(figsize=(6, 4))
+        plt.bar(feelings.keys(), feelings.values(), color='skyblue')
+        plt.xlabel('Emotions')
+        plt.ylabel('Values')
+        plt.title('Emotions')
+        plt.xticks(rotation=45, ha="right")  # Rotate labels for better readability
+        plt.tight_layout()
 
-    plt.figure(figsize=(6, 4))
-    plt.bar(feelings.keys(), feelings.values(), color='skyblue')
-    plt.xlabel('Emotions')
-    plt.ylabel('Values')
-    plt.title('Emotions with Values Above 0.65')
-    plt.xticks(rotation=45, ha="right")  # Rotate labels for better readability
-    plt.tight_layout()
-
-    # Save the plot as an image file
-    plt.savefig(os.path.join(FILE_DIRECTORY,'emotions.png'))
+        # Save the plot as an image file
+        plt.savefig(os.path.join(FILE_DIRECTORY,'emotions.png'))
+    except Exception as e:
+        print(f"Failed to generate or save the plot: {e}")
 
 
 if __name__ == '__main__':

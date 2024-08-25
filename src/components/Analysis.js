@@ -32,6 +32,8 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex,attention,en
         setCurrentAnswer(answer);
     }, [answer]);
 
+
+
     return (
         <>
             <Typography variant="h4" align="center" gutterBottom color="darkblue" fontWeight={900}>
@@ -114,12 +116,13 @@ const Analysis = ({answer, handleNextQuestion, currentQuestionIndex,attention,en
                 </Grid>
             </Grid>
             <FeelingsAnalysis attention={attention} engagement={engagement} pleasantness={pleasantness}/>
+            {imageSrc ? <img src={imageSrc} alt="Emotions Above 0.65" /> : <p>Loading image...</p>}
             <Grid container justifyContent="center" mt={4}>
                 <Button variant="contained" color="primary" onClick={handleNext}>
                     Next Question
                 </Button>
             </Grid>
-            {imageSrc ? <img src={imageSrc} alt="Emotions Above 0.65" /> : <p>Loading image...</p>}
+
         </>
     )
 }

@@ -10,13 +10,24 @@ import {useTranslation} from "react-i18next";
 import Analysis from "./Analysis";
 import MoodComponent from "./MoodComponent";
 import FeelingsAnalysis from "./FeelingsAnalysis";
+import Loader from "./Loader";
+import VideoComponent from "./VideoComponent";
+import {useExternalScript} from "../helpers/ai-sdk/externalScriptsLoader";
 
-const Question = ({question, showCards, showVideo, handleClickButton, handleSubmit, interviewId, answer, handleNextQuestion, currentQuestionIndex, showAnalysis, attention , engagement,pleasantness}) => {
+
+const Question = ({question, showCards, showVideo, setVideo, handleClickButton, handleSubmit, interviewId, answer, handleNextQuestion, currentQuestionIndex, showAnalysis, attention , engagement,pleasantness, isReadyAnalysis}) => {
     let open_mouth_image, closed_mouth_img;
     const { t } = useTranslation();
+    const mphToolsState = useExternalScript("https://sdk.morphcast.com/mphtools/v1.0/mphtools.js");
+    const aiSdkState = useExternalScript("https://ai-sdk.morphcast.com/v1.16/ai-sdk.js");
+
     const audioRef = useRef(null);
     const [isSpeaking, setIsSpeaking] = useState(false);
     const audioUrl = `http://localhost:5000/media/output${currentQuestionIndex+1}.mp3`;
+
+    const stopVideo = () => {
+        setVideo(false);
+    };
 
     if(interviewId === 0){
         open_mouth_image = "assets_images/tought_o.png";
@@ -75,7 +86,7 @@ const Question = ({question, showCards, showVideo, handleClickButton, handleSubm
              p={2}
              sx={{
                  m: 5,
-                 border: '2px solid grey',
+                 border: '2px solid darkblue',
                  display: 'flex',
                  flexDirection: 'column',
                  alignItems: 'center',
@@ -100,8 +111,28 @@ const Question = ({question, showCards, showVideo, handleClickButton, handleSubm
                     <RoundButton onClick={handleClickButton}> Ready to Answer</RoundButton>
                 ))}
 
-            {showAnalysis && <Analysis answer={answer} handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}
-            attention={attention} engagement={engagement} pleasantness={pleasantness}/>}
+            {!showCards && showVideo && <VideoComponent showVideo={showVideo} aiSdkState={aiSdkState}
+                                                        mphToolsState={mphToolsState}
+                                                        onTimerEnd={stopVideo}/>
+            }
+
+            {showAnalysis ? (
+                isReadyAnalysis ? (
+                    <Analysis
+                        answer={answer}
+                        handleNextQuestion={handleNextQuestion}
+                        currentQuestionIndex={currentQuestionIndex}
+                        attention={attention}
+                        engagement={engagement}
+                        pleasantness={pleasantness}
+                    />
+                ) : (
+                    <Loader isLoading={!isReadyAnalysis} />
+                )
+            ) : null}
+            {/*{showAnalysis && !isReadyAnalysis && <Loader isLoading={!isReadyAnalysis}/> }*/}
+            {/*{showAnalysis && <Analysis answer={answer} handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}*/}
+            {/*attention={attention} engagement={engagement} pleasantness={pleasantness}/>}*/}
 
 
             <div>
