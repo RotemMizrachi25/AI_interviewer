@@ -162,7 +162,7 @@ def question_generator_strict(field, role):
     return generate_chat_call(user_massage, 0.9)
 
 
-def synthesize_text(text, output_file):
+def synthesize_text(text, output_file,voice):
     # Initialize the client
     client = texttospeech.TextToSpeechClient()
 
@@ -172,7 +172,7 @@ def synthesize_text(text, output_file):
     # Set up the voice configuration
     voice = texttospeech.VoiceSelectionParams(
         language_code="en-US",  # Change to "he-IL" for Hebrew
-        name="en-US-Neural2-C")
+        name=voice)  #"en-US-Neural2-C"
 
     # Set up the audio configuration
     audio_config = texttospeech.AudioConfig(
@@ -194,21 +194,25 @@ def generate_questions(field, interviewerID, role):
     questions_generated = {}
     if interviewerID == 0:
         questions_generated = question_generator_strict(field, role)
+        voice = "en-US-Studio-Q"
     elif interviewerID == 1:
         questions_generated = question_generator_behave(field, role)
+        voice = "en-US-Neural2-F"
     elif interviewerID == 2:
         questions_generated = question_generator_technical(field, role)
+        voice = "en-US-Wavenet-J"
     else:
-        question_generator_friendly(field, role)
+        questions_generated = question_generator_friendly(field, role)
+        voice = "en-GB-Neural2-A"
 
     questions_dict = json.loads(questions_generated)
     questions_iterator = iter(questions_dict.items())
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./inspiring-team-386523-29d458586b76.json"
     i = 1
     for key, value in questions_iterator:
-        text_to_synthesize = f"{key} {value}"
+        text_to_synthesize = f"{value}"
         output_file_path = f"output{i}.mp3"
-        synthesize_text(text_to_synthesize, output_file_path)
+        synthesize_text(text_to_synthesize, output_file_path,voice)
         i += 1
     return questions_dict
 
