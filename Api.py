@@ -223,8 +223,8 @@ def submit_data():
     field = data.get('field')
     role = data.get('role')
     print(interviewer_type,field,role)
-    #response = generate_questions(field, interviewer_type, role)
-    response = {'question 1': 'Can you explain the concept of RESTful API and how you have implemented it in your projects?', 'question 2': 'How do you handle asynchronous operations in JavaScript, and what are the potential pitfalls to watch out for?', 'question 3': 'Could you walk me through your experience with database normalization and how it has helped improve database performance in your projects?', 'question 4': 'In your opinion, what are the key differences between unit testing and integration testing, and how do you decide which approach to take in your projects?', 'question 5': 'Can you discuss a challenging bug you encountered in one of your projects and how you approached debugging and resolving it?', 'question 6': 'How do you ensure the security of user data in your applications, especially when handling sensitive information like passwords?', 'question 7': 'Describe your experience with version control systems like Git, including branching strategies and how you handle conflicts in collaborative projects.', 'question 8': 'What is your approach to optimizing the performance of web applications, and can you share a specific example where you improved the speed or efficiency of a project?', 'question 9': 'How do you stay up-to-date with the latest technologies and trends in the field of full-stack development, and how do you decide which ones to incorporate into your work?', 'question 10': 'Explain a project where you had to work with a third-party API and the challenges you faced integrating it into your application.', 'question 11': 'Discuss a time when you had to make trade-offs between delivering a feature on time and ensuring code quality. How did you handle that situation?', 'question 12': 'What is your experience with containerization technologies like Docker, and how have you used them to streamline the deployment process in your projects?', 'question 13': "How do you approach code reviews in your team, and what criteria do you consider when providing feedback on your colleagues' code?", 'question 14': 'Can you explain the concept of CORS (Cross-Origin Resource Sharing) and how you address CORS issues in your web applications?', 'question 15': 'Describe a project where you had to scale the application to accommodate a growing user base. What challenges did you face, and how did you ensure scalability and performance under increased load?'}
+    response = generate_questions(field, interviewer_type, role)
+    #response = {'question 1': 'Can you explain the concept of RESTful API and how you have implemented it in your projects?', 'question 2': 'How do you handle asynchronous operations in JavaScript, and what are the potential pitfalls to watch out for?', 'question 3': 'Could you walk me through your experience with database normalization and how it has helped improve database performance in your projects?', 'question 4': 'In your opinion, what are the key differences between unit testing and integration testing, and how do you decide which approach to take in your projects?', 'question 5': 'Can you discuss a challenging bug you encountered in one of your projects and how you approached debugging and resolving it?', 'question 6': 'How do you ensure the security of user data in your applications, especially when handling sensitive information like passwords?', 'question 7': 'Describe your experience with version control systems like Git, including branching strategies and how you handle conflicts in collaborative projects.', 'question 8': 'What is your approach to optimizing the performance of web applications, and can you share a specific example where you improved the speed or efficiency of a project?', 'question 9': 'How do you stay up-to-date with the latest technologies and trends in the field of full-stack development, and how do you decide which ones to incorporate into your work?', 'question 10': 'Explain a project where you had to work with a third-party API and the challenges you faced integrating it into your application.', 'question 11': 'Discuss a time when you had to make trade-offs between delivering a feature on time and ensuring code quality. How did you handle that situation?', 'question 12': 'What is your experience with containerization technologies like Docker, and how have you used them to streamline the deployment process in your projects?', 'question 13': "How do you approach code reviews in your team, and what criteria do you consider when providing feedback on your colleagues' code?", 'question 14': 'Can you explain the concept of CORS (Cross-Origin Resource Sharing) and how you address CORS issues in your web applications?', 'question 15': 'Describe a project where you had to scale the application to accommodate a growing user base. What challenges did you face, and how did you ensure scalability and performance under increased load?'}
     print(response)
     return jsonify(response)
 
@@ -236,10 +236,6 @@ def dominante_moods():
     if not data:
         return jsonify({'error': 'No data received'}), 400
 
-    #print("Received data:", data)  # Log the received data
-    #print(type(data), type(data['affects'][0]))
-
-    # show_feelings(data['affects'])
     mean_data = mean_calc(data['affects'])
     print(mean_data)
     temp ={}
@@ -281,16 +277,6 @@ def valence():
     }), 200
 
 
-def show_feelings(data_received):
-    data = {}
-    # how many times the feeling was above 0.6
-    for sample in data_received:
-        for feeling, value in sample.items():
-            if feeling in data and sample[feeling] >= 0.6:
-                data[feeling] += 1
-            elif sample[feeling] >= 0.6:
-                data[feeling] = 1
-    print(data)
 
 def mean_calc(data_received):
     mean_data = {}
@@ -315,28 +301,26 @@ def recorder():
 
     print("Received data:", data)  # Log the received data
     # call function to analyze the content 
-    # answer = speechTotext.record(data["language"])
+    #answer = speechTotext.record(data["language"])
     answer = []
-    # thread = threading.Thread(target=speechTotext.record, args=(data["language"],answer))
-    # thread.start()
-    # thread.join()
+    thread = threading.Thread(target=speechTotext.record, args=(data["language"],answer))
+    thread.start()
+    thread.join()
     print(answer)
     while True:
         if len(feelings)>0:
             break
     print(feelings)
     emotion_graph()
-    # if answer is not []:
-    #     analysis = content_analyzer(data["field"], data["question"], answer[0],feelings.keys())
-    # else:
-    #     analysis = content_analyzer(data["field"], data["question"], "",feelings.keys())
-    #print(analysis)
-    analysis = {"disadvantage1":"","disadvantage2":"","advantage1":"","advantage2":"","suggestion1":"","suggestion2":"","revised answer":""}
+    if answer is not []:
+         analysis = content_analyzer(data["field"], data["question"], answer[0],feelings.keys())
+    else:
+         analysis = content_analyzer(data["field"], data["question"], "",feelings.keys())
     print(analysis)
+    #analysis = {"disadvantage1":"","disadvantage2":"","advantage1":"","advantage2":"","suggestion1":"","suggestion2":"","revised answer":""}
+    #print(analysis)
     return analysis
 
-    # Example: return received data or some processed result
-    return jsonify({'message': 'Data processed', 'yourData': data}), 200
 
 @app.route('/stop-recording', methods=['POST'])
 def stop_recording():
