@@ -422,6 +422,8 @@ def emotion_graph():
 
         # Save the plot as an image file
         plt.savefig(os.path.join(FILE_DIRECTORY,'emotions.png'))
+        feelings.clear()
+
     except Exception as e:
         print(f"Failed to generate or save the plot: {e}")
 
