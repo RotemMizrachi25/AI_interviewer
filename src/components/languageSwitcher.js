@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import {Link} from "react-router-dom";
-import {Button, Tab} from "@mui/material";
+import {Button} from "@mui/material";
 import { useLanguage } from './LanguageContext';
 
 function LanguageSwitcher() {

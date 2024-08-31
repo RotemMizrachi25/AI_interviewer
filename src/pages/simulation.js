@@ -1,26 +1,13 @@
-import React, {useEffect, useRef, useState} from "react";
-import { useExternalScript } from "../helpers/ai-sdk/externalScriptsLoader";
-import { getAiSdkControls } from "../helpers/ai-sdk/loader";
-import { BsSkipEndFill } from "react-icons/bs";
+import React, {useEffect, useState} from "react";
 import '../App.css';
 import '../index.css';
 import EngagementComponent from "../components/EngagementComponent";
 import MoodComponent from "../components/MoodComponent";
-import VideoComponent from "../components/VideoComponent";
-import Timer from "../components/Timer";
-import RoundButton from "../components/RoundButton";
-import SpeechBalloon from "../components/SpeechBaloon";
-import ActionAreaCard from "../components/Cards";
-import {margin} from "@mui/system";
 import InterviewerCards from "../components/Cards";
-import {Button} from "@mui/material";
-import Typography from "@mui/material/Typography";
 import Question from "../components/Question";
-import SpeakingCharacter from "../components/SpeakingCharacter";
-import { ClipLoader } from 'react-spinners';
 import {useLanguage} from "../components/LanguageContext";
 import Loader from "../components/Loader";
-// import {handleMoodData} from "../components/MoodComponent"
+
 
 function Simulation() {
     // Mood Data
@@ -45,11 +32,6 @@ function Simulation() {
     const [showAnalysis, setShowAnalysis] = useState(false);
     const [isReadyAnalysis, setReadyAnalysis] = useState(false);
     const { language } = useLanguage();
-    const audioSources = [
-        "/output1.mp3", // for index 0
-        "/output2.mp3", // for index 1
-        "/output3.mp3", // for index
-    ];
 
 
     const moodApiCaller = async () => {
@@ -60,7 +42,6 @@ function Simulation() {
             },
             body: JSON.stringify({affects: affects})
         });
-        //console.log(response);
         const response_json = await response.json();
 
         console.log(response_json.results);
@@ -74,10 +55,8 @@ function Simulation() {
             },
             body: JSON.stringify({language: language, question: questions[questionKeys[currentQuestionIndex]], field:selectedField})
         });
-        //console.log(response);
         const response_json = await response.json();
         setAnalysis(response_json);
-        //console.log(response_json.results);
     };
 
       const submitApiCaller = async (interviewerId,selectedfield,role) => {
@@ -241,15 +220,12 @@ function Simulation() {
 
         if (showVideo) {
             recordApiCall();
-            // let content = {"disadvantage1": "Can you explain the concept of RESTful API and how you have implemented it in your projects?"}
-            // setAnalysis(content)
         }
     }, [showVideo]);
 
      useEffect(() => {
         if (questions) {
             const Keys = ['question1', 'question2','question3','question4','question5','question6','question7','question8','question9','question10','question11','question12','question13','question14','question15']
-            //const questionKeys = setQuestionkeys(Object.keys(questions)); // Extract keys from the dictionary
             setQuestionkeys(Keys)
             console.log(questionKeys);
         }
@@ -299,13 +275,6 @@ function Simulation() {
                             }
                         </div>
                         <br/>
-                {/*<div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>*/}
-                {/*    {!showCards && showVideo && <VideoComponent showVideo={showVideo} aiSdkState={aiSdkState}*/}
-                {/*                                                mphToolsState={mphToolsState}*/}
-                {/*                                                onTimerEnd={stopVideo}/>*/}
-                {/*    }*/}
-                {/*</div>*/}
-
                 {<EngagementComponent onDataAttention={handleAttentionData} onDataArousalValence={handleArousalValencData} showVideo={showVideo}/>}
                 {<MoodComponent handleMoodData={handleMoodData} showVideo={showVideo}/>}
 

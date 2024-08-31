@@ -1,7 +1,6 @@
 import Typography from "@mui/material/Typography";
-import {Button, CardActionArea, CardActions, Grid} from "@mui/material";
+import {Button, CardActionArea, Grid} from "@mui/material";
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import * as React from "react";
 import {useEffect, useState} from "react";

@@ -8,8 +8,6 @@ import RoundButton from "./RoundButton";
 import Box from '@mui/material/Box';
 import {useTranslation} from "react-i18next";
 import Analysis from "./Analysis";
-import MoodComponent from "./MoodComponent";
-import FeelingsAnalysis from "./FeelingsAnalysis";
 import Loader from "./Loader";
 import VideoComponent from "./VideoComponent";
 import {useExternalScript} from "../helpers/ai-sdk/externalScriptsLoader";
@@ -130,10 +128,6 @@ const Question = ({question, showCards, showVideo, setVideo, handleClickButton, 
                     <Loader isLoading={!isReadyAnalysis} />
                 )
             ) : null}
-            {/*{showAnalysis && !isReadyAnalysis && <Loader isLoading={!isReadyAnalysis}/> }*/}
-            {/*{showAnalysis && <Analysis answer={answer} handleNextQuestion={handleNextQuestion} currentQuestionIndex={currentQuestionIndex}*/}
-            {/*attention={attention} engagement={engagement} pleasantness={pleasantness}/>}*/}
-
 
             <div>
                 <audio ref={audioRef} src={audioUrl}/>

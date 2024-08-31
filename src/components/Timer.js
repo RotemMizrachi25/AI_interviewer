@@ -37,7 +37,6 @@ const Timer = ({onTimerEnd}) => {
                 {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
             </span>
             <br/>
-            {/*{timeLeft === 0 ? <button>evaluate answer</button> : <button>Submit Answer</button>}*/}
 
         </div>
     );
