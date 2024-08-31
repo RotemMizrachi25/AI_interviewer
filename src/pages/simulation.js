@@ -240,6 +240,7 @@ function Simulation() {
         // hide the analysis
         setShowAnalysis(false);
         setReadyAnalysis(false);
+        setAnalysis({});
     };
 
 

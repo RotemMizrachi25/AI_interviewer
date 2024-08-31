@@ -20,7 +20,7 @@ audio = pyaudio.PyAudio()
 should_stop = False
 
 
-def record(language,result_container):
+def record(language):
     # Open the audio stream
     global should_stop
     stream = audio.open(format=FORMAT,
@@ -61,9 +61,10 @@ def record(language,result_container):
     print(f"Audio saved to {output_path}")
     
     # Path to your audio file (must be in WAV format with LINEAR16 encoding)
-    transcription_result =  transcribe_audio(output_path, language)
-    result_container.append(transcription_result)
+    transcription_result = transcribe_audio(output_path, language)
+    # result_container.append(transcription_result)
     should_stop = False
+    return transcription_result
 
 
 def stop_recording():
@@ -78,10 +79,12 @@ def transcribe_audio(audio_file_path, language):
     with io.open(audio_file_path, "rb") as audio_file:
         content = audio_file.read()
 
-    if language is 'he':
+    print(language)
+    if language == 'he':
         language = "he-IL"
     else:
         language = "en-US"
+    print(language)
     # Configure the audio settings
     audio = speech.RecognitionAudio(content=content)
     config = speech.RecognitionConfig(
@@ -94,6 +97,7 @@ def transcribe_audio(audio_file_path, language):
     response = client.recognize(config=config, audio=audio)
 
     answer = ""
+    print(response)
 
     # Print the transcription
     for result in response.results:

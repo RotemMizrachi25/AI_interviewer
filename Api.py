@@ -21,6 +21,7 @@ def submit_data():
     role = data.get('role')
     print(interviewer_type,field,role)
     response = generate_questions(field, interviewer_type, role)
+    print(response)
     return jsonify(response)
 
 
@@ -96,19 +97,20 @@ def recorder():
 
     print("Received data:", data)  # Log the received data
     # call function to analyze the content
-    answer = []
-    thread = threading.Thread(target=speechTotext.record, args=(data["language"],answer))
-    thread.start()
-    thread.join()
+    # answer = []
+    answer = speechTotext.record(data["language"])
+    # thread = threading.Thread(target=speechTotext.record, args=(data["language"],answer))
+    # thread.start()
+    # thread.join()
+    print("answer:", answer)
     while True:
         if len(feelings)>0:
             break
     print(feelings)
     emotion_graph()
-    if answer is not []:
-         analysis = content_feelings_analyzer(data["field"], data["question"], answer[0],feelings.keys())
-    else:
-         analysis = content_feelings_analyzer(data["field"], data["question"], "",feelings.keys())
+    analysis = content_feelings_analyzer(data["field"], data["question"], answer,feelings.keys())
+
+ #        analysis = content_feelings_analyzer(data["field"], data["question"], "",feelings.keys())
     return analysis
 
 

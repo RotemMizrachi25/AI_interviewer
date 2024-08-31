@@ -7,7 +7,7 @@ import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import FeelingsAnalysis from "./FeelingsAnalysis";
 
-const Analysis = ({answer, handleNextQuestion, currentQuestionIndex,attention,engagement,pleasantness}) => {
+const Analysis = ({answer, handleNextQuestion,attention,engagement,pleasantness}) => {
     const { t } = useTranslation();
     const [currentAnswer, setCurrentAnswer] = useState(answer);
     const [imageSrc, setImageSrc] = useState(null);
