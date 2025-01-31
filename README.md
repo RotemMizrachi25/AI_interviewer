@@ -1,26 +1,18 @@
-# mph-sdk-integration-react
+# AI Interviewer
+leverages OpenAI to generate role-specific interview questions and uses Google's speech-to-text and OpenAI for response analysis. It evaluates emotions with Morphcast, providing a comprehensive assessment of candidates. Ideal for enhancing recruitment efficiency. 
 
-This template should help get you started developing with **MorphCast SDK** and React in Vite.
+# Demonstration Video
 
-## Getting started
+Watch the AI Interviewer in action! This video demonstrates how our system automates the interview process using advanced AI technologies. See firsthand how we generate interview questions, analyze responses, and assess candidate emotions.
 
-Firstly, [generate a license key](https://www.morphcast.com/sdk-licence-request/) for MorphCast SDK and insert into the configuration snippet. 
+https://drive.google.com/file/d/14XU9BfBSa8NzNvWtPJl3HZrOMHHPm69u/view 
 
-You can find the configuration of the MorphCast SDK, under:
+### What You Will See in the Video:
 
-* `src/helpers/ai-sdk/loader.js`
+ Interview Question Generation: How the system uses OpenAI to tailor questions specifically to the job role.\
+ Speech-to-Text Analysis: Our integration with Google's speech-to-text to capture candidate responses.\
+ Emotion Analysis: Demonstrating the use of Morphcast to evaluate the emotional responses of candidates.
 
-The **start()** / **stop()** controls of the MorphCast SDK are inside the App.js:  
-
-* `src/App.js`
-
-All the ready-to-use components binded to the specific modules of the MorphCast SDK are under:
-
-* `src/components/`
-
-You can find the latest [documentation of the MorphCast SDK, here](https://ai-sdk.morphcast.com/latest/index.html).
-
-----
 
 # React instructions
 
@@ -65,32 +57,6 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
